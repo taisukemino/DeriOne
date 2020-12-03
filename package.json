@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Goyemon/DeriOne/issues"
   },
-  "homepage": "https://github.com/Goyemon/DeriOne#readme"
+  "homepage": "https://github.com/Goyemon/DeriOne#readme",
+  "dependencies": {
+    "truffle": "^5.1.55"
+  }
 }
