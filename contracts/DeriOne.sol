@@ -2,21 +2,21 @@ pragma solidity 0.6.0;
 
 import "./interfaces/IHegicETHOption.sol";
 import "./interfaces/IETHPriceOracle.sol";
-import "./interfaces/IOpynV1Exchange.sol";
-import "./interfaces/IOpynV1OptionsFactory.sol";
+import "./interfaces/IOpynExchangeV1.sol";
+import "./interfaces/IOpynOptionsFactoryV1.sol";
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 
 contract DeriOne is Ownable {
     IHegicETHOption private IHegicETHOptionInstance;
     IETHPriceOracle private IETHPriceOracleInstance;
-    IOpynV1Exchange private IOpynV1ExchangeInstance;
-    IOpynV1OptionsFactory private IOpynV1OptionsFactoryInstance;
+    IOpynExchangeV1 private IOpynExchangeV1Instance;
+    IOpynOptionsFactoryV1 private IOpynOptionsFactoryV1Instance;
 
 
     event NewHegicETHOptionAddressRegistered(address hegicETHOptionAddress);
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
-    event NewOpynV1ExchangeAddressRegistered(address opynV1ExchangeAddress);
-    event NewOpynV1OptionsFactoryAddressRegistered(address opynV1OptionsFactoryAddress);
+    event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
+    event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
     setETHPriceOracleAddress(address _ETHPriceOracleAddress) public onlyOwner {
         ETHPriceOracleAddress = _ETHPriceOracleAddress;
         IETHPriceOracleInstance = IETHPriceOracle(ETHPriceOracleAddress);
@@ -31,18 +31,21 @@ contract DeriOne is Ownable {
         emit NewHegicETHOptionAddressRegistered(hegicETHOptionAddress);
     }
 
-    setOpynV1ExchangeAddress(address _opynV1ExchangeAddress) public onlyOwner {
-        opynV1ExchangeAddress = _opynV1ExchangeAddress;
-        IOpynV1ExchangeInstance = IOpynV1Exchange(opynV1ExchangeAddress);
+    setOpynExchangeV1Address(address _opynExchangeV1Address) public onlyOwner {
+        opynExchangeV1Address = _opynExchangeV1Address;
+        IOpynExchangeV1Instance = IOpynExchangeV1(opynExchangeV1Address);
 
-        emit NewOpynV1ExchangeAddressRegistered(opynV1ExchangeAddress);
+        emit NewOpynExchangeV1AddressRegistered(opynExchangeV1Address);
     }
 
-    setOpynV1OptionsFactoryAddress(address _opynV1OptionsFactoryAddress) public onlyOwner {
-        opynV1OptionsFactoryAddress = _opynV1OptionsFactoryAddress;
-        IOpynV1OptionsFactoryInstance = IOpynV1Exchange(opynV1OptionsFactoryAddress);
+    setOpynOptionsFactoryV1Address(address _opynOptionsFactoryV1Address) public onlyOwner {
+        opynOptionsFactoryV1Address = _opynOptionsFactoryV1Address;
+        IOpynOptionsFactoryV1Instance = IOpynExchangeV1(opynOptionsFactoryV1Address);
 
-        emit NewOpynV1OptionsFactoryAddressRegistered(opynV1OptionsFactoryAddress);
+        emit NewOpynOptionsFactoryV1AddressRegistered(opynOptionsFactoryV1Address);
+    }
+
+
     }
 
     /** 
@@ -51,7 +54,7 @@ contract DeriOne is Ownable {
     * 100 oDai protects 100 * 10^-14 Dai i.e. 10^-12 Dai.
     */
     function getOpynPremium(oTokenAddress, oTokensToBuy)　{
-        uint256 premiumToPayInETH = IOpynV1ExchangeInstance.premiumToPay(oTokenAddress, address(0), oTokensToBuy); 
+        uint256 premiumToPayInETH = IOpynExchangeV1Instance.premiumToPay(oTokenAddress, address(0), oTokensToBuy); 
         return premiumToPayInETH;           
     }
 

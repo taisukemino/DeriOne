@@ -1,4 +1,4 @@
-interface IOpynV1OptionsFactory {
+interface IOpynOptionsFactoryV1 {
     function tokens(string) external view returns (address);
 
     function changeAsset(string _asset, address _addr) external;

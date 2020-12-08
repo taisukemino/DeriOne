@@ -1,4 +1,4 @@
-interface IOpynV1Exchange {
+interface IOpynExchangeV1 {
     function premiumReceived(
         address oTokenAddress,
         address payoutTokenAddress,
