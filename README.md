@@ -1,8 +1,12 @@
+# Motivation
+
 On Dec 1st(2020), I found that the put option in Hegic was so much more expensive than the one in Opyn. In Hegic, it cost about **$57** to buy a 1 ETH put option with the strike price of $360(expiry is 21 days.) Whereas, in Opyn, it cost about **$2.5** to buy a 1 ETH put option with the strike price of $360(expiry is about 24days.)
 
 It'd be useful to get the best option price across options protocols both for investors and developers.
 
 Each protocol has a different mechanism, contract structure and interface. It's a challenge for us to come up with a simple solution and keep upgrading our code.
+
+# What This Contract Does
 
 In this first version, I keep a function minimal. You can get the best ETH put option price from Hegic and Opyn by calling a single function.
 
@@ -26,6 +30,8 @@ _The logical extension of this aggregator would be expanding to other derivative
    ```
 
 # Deploy to a Local Ganache Instance That Mirrors the Mainnet
+
+I develop with the mirrored mainnet in a local instance because it is painful to use a testnet in a cross protocol development.
 
 1. Install the [Ganache CLI](https://github.com/trufflesuite/ganache-cli)
 
@@ -70,6 +76,14 @@ _The logical extension of this aggregator would be expanding to other derivative
    ```
 
 # Interact With the Contract
+
+## Set up 
+
+Call some functions to instantiate a contract. 
+
+hegicETHOptionAddress: [0xEfC0eEAdC1132A12c9487d800112693bf49EcfA2](https://etherscan.io/address/0xefc0eeadc1132a12c9487d800112693bf49ecfa2)
+opynExchangeAddress: [0x39246c4f3f6592c974ebc44f80ba6dc69b817c71](https://etherscan.io/address/0x39246c4f3f6592c974ebc44f80ba6dc69b817c71)
+ETHPriceOracleAddress: [0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419](https://etherscan.io/address/0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419)
 
 Call your contract's function within the truffle console.
 
