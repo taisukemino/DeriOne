@@ -3,16 +3,20 @@ pragma solidity 0.6.0;
 import "./interfaces/IHegicETHOption.sol";
 import "./interfaces/IETHPriceOracle.sol";
 import "./interfaces/IOpynExchange.sol";
+import "./interfaces/IOpynOptionsFactory.sol";
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 
 contract DeriOne is Ownable {
     IHegicETHOption private IHegicETHOptionInstance;
     IETHPriceOracle private IETHPriceOracleInstance;
     IOpynExchange private IOpynExchangeInstance;
+    IOpynOptionsFactory private IOpynOptionsFactoryInstance;
+
 
     event NewHegicETHOptionAddressRegistered(address hegicETHOptionAddress);
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
     event NewOpynExchangeAddressRegistered(address opynExchangeAddress);
+    event NewOpynOptionsFactoryAddressRegistered(address opynOptionsFactoryAddress);
     setETHPriceOracleAddress(address _ETHPriceOracleAddress) public onlyOwner {
         ETHPriceOracleAddress = _ETHPriceOracleAddress;
         IETHPriceOracleInstance = IETHPriceOracle(ETHPriceOracleAddress);
@@ -32,6 +36,13 @@ contract DeriOne is Ownable {
         IOpynExchangeInstance = IOpynExchange(opynExchangeAddress);
 
         emit NewOpynExchangeAddressRegistered(opynExchangeAddress);
+    }
+
+    setOpynOptionsFactoryAddress(address _opynOptionsFactoryAddress) public onlyOwner {
+        opynOptionsFactoryAddress = _opynOptionsFactoryAddress;
+        IOpynOptionsFactoryInstance = IOpynExchange(opynOptionsFactoryAddress);
+
+        emit NewOpynOptionsFactoryAddressRegistered(opynOptionsFactoryAddress);
     }
 
     /** 
