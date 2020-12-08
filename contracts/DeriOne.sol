@@ -44,4 +44,31 @@ contract DeriOne is Ownable {
         return premiumToPayInETH;           
     }
 
+    /** 
+    * calculate the premium in hegic
+    */
+    function getHegicPremium(period, strike) {
+        uint256 impliedVolatility = getImpliedVolatility();
+        uint256 ETHPrice = getETHPrice();
+        uint256 premiumToPayInETH = sqrt(period) * impliedVolatility * strike / ETHPrice;
+        return premiumToPayInETH;
+    }
+
+    /** 
+    * get the implied volatility
+    */
+    function getImpliedVolatility()　{
+        uint256 impliedVolatilityRate = IHegicETHOptionInstance.impliedVolRate();
+        return impliedVolatilityRate;
+    }
+
+    /** 
+    * get the underlying asset price
+    */
+    function getETHPrice()　{
+        (, int latestPrice, , , ) = IETHPriceOracleInstance.latestRoundData();
+        uint256 ETHPrice = uint256(latestPrice);
+        return ETHPrice;
+    }
+
 }
