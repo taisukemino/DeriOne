@@ -7,6 +7,9 @@ import "./interfaces/IOpynExchangeV1.sol";
 import "./interfaces/IOpynOptionsFactoryV1.sol";
 import "./interfaces/IOpynOTokenV1.sol";
 
+/// @title A contract for getting the best options price
+/// @author Tai
+/// @notice For now, this contract gets the best ETH put options price from Opyn and Hegic
 contract DeriOne is Ownable {
     IETHPriceOracle private IETHPriceOracleInstance;
     IHegicETHOption private IHegicETHOptionInstance;
@@ -56,39 +59,33 @@ contract DeriOne is Ownable {
         emit NewOpynOTokenV1AddressRegistered(opynOTokenV1Address);
     }
 
+    /// @notice get the list of oToken addresses
     function getOTokenAddressList() public onlyOwner {
         oTokenAddressList = IOpynOptionsFactoryV1Instance.optionsContracts();
     }
-    /** 
-    * oTokenAddress is oToken contract's address
-    * paymentTokenAddress is 0 because paying with ETH 
-    * 100 oDai protects 100 * 10^-14 Dai i.e. 10^-12 Dai.
-    */
+    /// @notice get the premium in opyn
+    /// @param oTokenAddress oToken contract's address.
+    /// @param oTokensToBuy the amount of oTokens to buy
+    /// @return the premium in ETH
     function getOpynPremium(oTokenAddress, oTokensToBuy)　{
         uint256 premiumToPayInETH = IOpynExchangeV1Instance.premiumToPay(oTokenAddress, address(0), oTokensToBuy); 
-        return premiumToPayInETH;           
+        return premiumToPayInETH;
     }
 
-    /** 
-    * get the implied volatility
-    */
+    /// @notice get the implied volatility
     function getImpliedVolatility()　{
         uint256 impliedVolatilityRate = IHegicETHOptionInstance.impliedVolRate();
         return impliedVolatilityRate;
     }
 
-    /** 
-    * get the underlying asset price
-    */
+    /// @notice get the underlying asset price
     function getETHPrice()　{
         (, int latestPrice, , , ) = IETHPriceOracleInstance.latestRoundData();
         uint256 ETHPrice = uint256(latestPrice);
         return ETHPrice;
     }
 
-    /** 
-    * calculate the premium in hegic
-    */
+    /// @notice calculate the premium in hegic
     function getHegicPremium(period, strike) {
         uint256 impliedVolatility = getImpliedVolatility();
         uint256 ETHPrice = getETHPrice();
