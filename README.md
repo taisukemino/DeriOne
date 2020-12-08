@@ -77,9 +77,9 @@ I develop with the mirrored mainnet in a local instance because it is painful to
 
 # Interact With the Contract
 
-## Set up 
+## Set up
 
-Call some functions to instantiate a contract. 
+Call some functions to instantiate a contract.
 
 hegicETHOptionAddress: [0xEfC0eEAdC1132A12c9487d800112693bf49EcfA2](https://etherscan.io/address/0xefc0eeadc1132a12c9487d800112693bf49ecfa2)
 opynExchangeAddress: [0x39246c4f3f6592c974ebc44f80ba6dc69b817c71](https://etherscan.io/address/0x39246c4f3f6592c974ebc44f80ba6dc69b817c71)
