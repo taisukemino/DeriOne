@@ -14,6 +14,7 @@ contract DeriOne is Ownable {
     IOpynOptionsFactoryV1 private IOpynOptionsFactoryV1Instance;
     IOpynOTokenV1 private IOpynOTokenV1Instance;
 
+    address oTokenAddressList [];
 
     event NewHegicETHOptionAddressRegistered(address hegicETHOptionAddress);
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
@@ -55,6 +56,9 @@ contract DeriOne is Ownable {
         emit NewOpynOTokenV1AddressRegistered(opynOTokenV1Address);
     }
 
+    function getOTokenAddressList() public onlyOwner {
+        oTokenAddressList = IOpynOptionsFactoryV1Instance.optionsContracts();
+    }
     /** 
     * oTokenAddress is oToken contract's address
     * paymentTokenAddress is 0 because paying with ETH 
