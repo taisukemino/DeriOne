@@ -1,6 +1,6 @@
 pragma solidity ^0.6.0;
 
-interface IHegicETHOption {
+interface IHegicETHOptionV888 {
     function create(
         uint256 period,
         uint256 amount,

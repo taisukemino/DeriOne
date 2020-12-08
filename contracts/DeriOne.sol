@@ -2,7 +2,7 @@ pragma solidity 0.6.0;
 
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 import "./interfaces/IETHPriceOracle.sol";
-import "./interfaces/IHegicETHOption.sol";
+import "./interfaces/IHegicETHOptionV888.sol";
 import "./interfaces/IOpynExchangeV1.sol";
 import "./interfaces/IOpynOptionsFactoryV1.sol";
 import "./interfaces/IOpynOTokenV1.sol";
@@ -12,7 +12,7 @@ import "./interfaces/IOpynOTokenV1.sol";
 /// @notice For now, this contract gets the best ETH put options price from Opyn and Hegic
 contract DeriOne is Ownable {
     IETHPriceOracle private IETHPriceOracleInstance;
-    IHegicETHOption private IHegicETHOptionInstance;
+    IHegicETHOptionV888 private IHegicETHOptionV888Instance;
     IOpynExchangeV1 private IOpynExchangeV1Instance;
     IOpynOptionsFactoryV1 private IOpynOptionsFactoryV1Instance;
     IOpynOTokenV1 private IOpynOTokenV1Instance;
@@ -20,7 +20,7 @@ contract DeriOne is Ownable {
     address oTokenAddressList [];
 
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
-    event NewHegicETHOptionAddressRegistered(address hegicETHOptionAddress);
+    event NewHegicETHOptionV888AddressRegistered(address hegicETHOptionV888Address);
     event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
     event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
     event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
@@ -31,11 +31,11 @@ contract DeriOne is Ownable {
         emit NewETHPriceOracleAddressRegistered(ETHPriceOracleAddress);
     }
 
-    setHegicETHOptionAddress(address _hegicETHOptionAddress) public onlyOwner {
-        hegicETHOptionAddress = _hegicETHOptionAddress;
-        IHegicETHOptionInstance = IHegicETHOption(hegicETHOptionAddress);
+    setHegicETHOptionV888Address(address _hegicETHOptionV888Address) public onlyOwner {
+        hegicETHOptionV888Address = _hegicETHOptionV888Address;
+        IHegicETHOptionV888Instance = IHegicETHOptionV888(hegicETHOptionV888Address);
 
-        emit NewHegicETHOptionAddressRegistered(hegicETHOptionAddress);
+        emit NewHegicETHOptionV888AddressRegistered(hegicETHOptionV888Address);
     }
 
     setOpynExchangeV1Address(address _opynExchangeV1Address) public onlyOwner {
@@ -74,7 +74,7 @@ contract DeriOne is Ownable {
 
     /// @notice get the implied volatility
     function getImpliedVolatility()　{
-        uint256 impliedVolatilityRate = IHegicETHOptionInstance.impliedVolRate();
+        uint256 impliedVolatilityRate = IHegicETHOptionV888Instance.impliedVolRate();
         return impliedVolatilityRate;
     }
 
