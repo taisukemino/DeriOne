@@ -4,6 +4,7 @@ import "./interfaces/IHegicETHOption.sol";
 import "./interfaces/IETHPriceOracle.sol";
 import "./interfaces/IOpynExchangeV1.sol";
 import "./interfaces/IOpynOptionsFactoryV1.sol";
+import "./interfaces/IOpynOTokenV1.sol";
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 
 contract DeriOne is Ownable {
@@ -11,12 +12,14 @@ contract DeriOne is Ownable {
     IETHPriceOracle private IETHPriceOracleInstance;
     IOpynExchangeV1 private IOpynExchangeV1Instance;
     IOpynOptionsFactoryV1 private IOpynOptionsFactoryV1Instance;
+    IOpynOTokenV1 private IOpynOTokenV1Instance;
 
 
     event NewHegicETHOptionAddressRegistered(address hegicETHOptionAddress);
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
     event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
     event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
+    event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
     setETHPriceOracleAddress(address _ETHPriceOracleAddress) public onlyOwner {
         ETHPriceOracleAddress = _ETHPriceOracleAddress;
         IETHPriceOracleInstance = IETHPriceOracle(ETHPriceOracleAddress);
@@ -45,7 +48,11 @@ contract DeriOne is Ownable {
         emit NewOpynOptionsFactoryV1AddressRegistered(opynOptionsFactoryV1Address);
     }
 
+    setOpynOTokenV1Address(address _opynOTokenV1Address) public onlyOwner {
+        opynOTokenV1Address = _opynOTokenV1Address;
+        IOpynOTokenV1Instance = IOpynOTokenV1(opynOTokenV1Address);
 
+        emit NewOpynOTokenV1AddressRegistered(opynOTokenV1Address);
     }
 
     /** 
