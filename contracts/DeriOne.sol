@@ -1,23 +1,23 @@
 pragma solidity 0.6.0;
 
-import "./interfaces/IHegicETHOption.sol";
+import "openzeppelin-solidity/contracts/access/Ownable.sol";
 import "./interfaces/IETHPriceOracle.sol";
+import "./interfaces/IHegicETHOption.sol";
 import "./interfaces/IOpynExchangeV1.sol";
 import "./interfaces/IOpynOptionsFactoryV1.sol";
 import "./interfaces/IOpynOTokenV1.sol";
-import "openzeppelin-solidity/contracts/access/Ownable.sol";
 
 contract DeriOne is Ownable {
-    IHegicETHOption private IHegicETHOptionInstance;
     IETHPriceOracle private IETHPriceOracleInstance;
+    IHegicETHOption private IHegicETHOptionInstance;
     IOpynExchangeV1 private IOpynExchangeV1Instance;
     IOpynOptionsFactoryV1 private IOpynOptionsFactoryV1Instance;
     IOpynOTokenV1 private IOpynOTokenV1Instance;
 
     address oTokenAddressList [];
 
-    event NewHegicETHOptionAddressRegistered(address hegicETHOptionAddress);
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
+    event NewHegicETHOptionAddressRegistered(address hegicETHOptionAddress);
     event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
     event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
     event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
@@ -70,16 +70,6 @@ contract DeriOne is Ownable {
     }
 
     /** 
-    * calculate the premium in hegic
-    */
-    function getHegicPremium(period, strike) {
-        uint256 impliedVolatility = getImpliedVolatility();
-        uint256 ETHPrice = getETHPrice();
-        uint256 premiumToPayInETH = sqrt(period) * impliedVolatility * strike / ETHPrice;
-        return premiumToPayInETH;
-    }
-
-    /** 
     * get the implied volatility
     */
     function getImpliedVolatility()　{
@@ -96,4 +86,13 @@ contract DeriOne is Ownable {
         return ETHPrice;
     }
 
+    /** 
+    * calculate the premium in hegic
+    */
+    function getHegicPremium(period, strike) {
+        uint256 impliedVolatility = getImpliedVolatility();
+        uint256 ETHPrice = getETHPrice();
+        uint256 premiumToPayInETH = sqrt(period) * impliedVolatility * strike / ETHPrice;
+        return premiumToPayInETH;
+    }
 }
