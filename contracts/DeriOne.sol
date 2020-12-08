@@ -34,4 +34,14 @@ contract DeriOne is Ownable {
         emit NewOpynExchangeAddressRegistered(opynExchangeAddress);
     }
 
+    /** 
+    * oTokenAddress is oToken contract's address
+    * paymentTokenAddress is 0 because paying with ETH 
+    * 100 oDai protects 100 * 10^-14 Dai i.e. 10^-12 Dai.
+    */
+    function getOpynPremium(oTokenAddress, oTokensToBuy)　{
+        uint256 premiumToPayInETH = IOpynExchangeInstance.premiumToPay(oTokenAddress, address(0), oTokensToBuy); 
+        return premiumToPayInETH;           
+    }
+
 }
