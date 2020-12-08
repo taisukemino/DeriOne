@@ -3,14 +3,14 @@ pragma solidity 0.6.0;
 import "./interfaces/IHegicETHOption.sol";
 import "./interfaces/IETHPriceOracle.sol";
 import "./interfaces/IOpynV1Exchange.sol";
-import "./interfaces/IOpynOptionsFactory.sol";
+import "./interfaces/IOpynV1OptionsFactory.sol";
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 
 contract DeriOne is Ownable {
     IHegicETHOption private IHegicETHOptionInstance;
     IETHPriceOracle private IETHPriceOracleInstance;
     IOpynV1Exchange private IOpynV1ExchangeInstance;
-    IOpynOptionsFactory private IOpynV1OptionsFactoryInstance;
+    IOpynV1OptionsFactory private IOpynV1OptionsFactoryInstance;
 
 
     event NewHegicETHOptionAddressRegistered(address hegicETHOptionAddress);
