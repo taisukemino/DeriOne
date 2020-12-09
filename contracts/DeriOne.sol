@@ -9,8 +9,8 @@ import "./interfaces/IOpynExchangeV1.sol";
 import "./interfaces/IOpynOptionsFactoryV1.sol";
 import "./interfaces/IOpynOTokenV1.sol";
 
+/// @author tai
 /// @title A contract for getting the best options price
-/// @author Tai
 /// @notice For now, this contract gets the best ETH put options price from Opyn and Hegic
 contract DeriOne is Ownable {
     using SafeMath for uint256;
