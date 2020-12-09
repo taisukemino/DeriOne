@@ -1,6 +1,7 @@
 pragma solidity 0.6.0;
 
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./interfaces/IETHPriceOracle.sol";
 import "./interfaces/IHegicETHOptionV888.sol";
 import "./interfaces/IOpynExchangeV1.sol";
@@ -11,6 +12,8 @@ import "./interfaces/IOpynOTokenV1.sol";
 /// @author Tai
 /// @notice For now, this contract gets the best ETH put options price from Opyn and Hegic
 contract DeriOne is Ownable {
+    using SafeMath for uint256;
+
     IETHPriceOracle private IETHPriceOracleInstance;
     IHegicETHOptionV888 private IHegicETHOptionV888Instance;
     IOpynExchangeV1 private IOpynExchangeV1Instance;
