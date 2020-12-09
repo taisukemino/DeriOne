@@ -105,10 +105,13 @@ contract DeriOne is Ownable {
     }
 
     /// @notice calculate the premium in hegic
-    function getHegicPremium(period, strike) {
+    /// @param expiry expiration date
+    /// @param strike strike/execution price
+    /// @dev use the safemath library
+    function getHegicPremium(expiry, strike) {
         uint256 impliedVolatility = getImpliedVolatility();
         uint256 ETHPrice = getETHPrice();
-        uint256 premiumToPayInETH = sqrt(period) * impliedVolatility * strike / ETHPrice;
+        uint256 premiumToPayInETH = sqrt(expiry).mul(impliedVolatility).mul(strike.div(ETHPrice));
         return premiumToPayInETH;
     }
 }
