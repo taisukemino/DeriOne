@@ -4,6 +4,7 @@ import "openzeppelin-solidity/contracts/access/Ownable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./interfaces/IETHPriceOracle.sol";
 import "./interfaces/IHegicETHOptionV888.sol";
+import "./interfaces/IHegicETHPoolV888.sol";
 import "./interfaces/IOpynExchangeV1.sol";
 import "./interfaces/IOpynOptionsFactoryV1.sol";
 import "./interfaces/IOpynOTokenV1.sol";
@@ -16,6 +17,7 @@ contract DeriOne is Ownable {
 
     IETHPriceOracle private IETHPriceOracleInstance;
     IHegicETHOptionV888 private IHegicETHOptionV888Instance;
+    IHegicETHPoolV888 private IHegicETHPoolV888Instance;
     IOpynExchangeV1 private IOpynExchangeV1Instance;
     IOpynOptionsFactoryV1 private IOpynOptionsFactoryV1Instance;
     IOpynOTokenV1 private IOpynOTokenV1Instance;
@@ -27,6 +29,7 @@ contract DeriOne is Ownable {
 
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
     event NewHegicETHOptionV888AddressRegistered(address hegicETHOptionV888Address);
+    event NewHegicETHPoolV888AddressRegistered(address hegicETHPoolV888Address);
     event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
     event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
     event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
@@ -42,6 +45,13 @@ contract DeriOne is Ownable {
         IHegicETHOptionV888Instance = IHegicETHOptionV888(hegicETHOptionV888Address);
 
         emit NewHegicETHOptionV888AddressRegistered(hegicETHOptionV888Address);
+    }
+
+    setHegicETHPoolV888Address(address _hegicETHPoolV888Address) public onlyOwner {
+        hegicETHPoolV888Address = _hegicETHPoolV888Address;
+        IHegicETHPoolV888Instance = IHegicETHPoolV888(hegicETHPoolV888Address);
+
+        emit NewHegicETHPoolV888AddressRegistered(hegicETHPoolV888Address);
     }
 
     setOpynExchangeV1Address(address _opynExchangeV1Address) public onlyOwner {
