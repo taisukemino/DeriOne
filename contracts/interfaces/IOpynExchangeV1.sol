@@ -1,3 +1,5 @@
+pragma solidity ^0.6.0;
+
 interface IOpynExchangeV1 {
     function premiumReceived(
         address oTokenAddress,

@@ -1,3 +1,5 @@
+pragma solidity ^0.6.0;
+
 interface IOpynOTokenV1 {
     function addERC20Collateral(address vaultOwner, uint256 amt)
         external

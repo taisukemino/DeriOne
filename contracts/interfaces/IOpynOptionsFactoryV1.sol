@@ -1,3 +1,5 @@
+pragma solidity ^0.6.0;
+
 interface IOpynOptionsFactoryV1 {
     function tokens(string) external view returns (address);
 
