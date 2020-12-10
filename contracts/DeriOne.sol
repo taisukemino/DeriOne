@@ -89,13 +89,13 @@ contract DeriOne is Ownable {
     }
 
     /// @notice get the implied volatility
-    function getImpliedVolatility()　{
+    function getHegicImpliedVolatility()　{
         uint256 impliedVolatilityRate = IHegicETHOptionV888Instance.impliedVolRate();
         return impliedVolatilityRate;
     }
 
     /// @notice get the underlying asset price
-    function getETHPrice()　{
+    function getHegicETHPrice()　{
         (, int latestPrice, , , ) = IETHPriceOracleInstance.latestRoundData();
         uint256 ETHPrice = uint256(latestPrice);
         return ETHPrice;
@@ -122,7 +122,7 @@ contract DeriOne is Ownable {
     /// @param strike strike/execution price
     /// @dev use the safemath library
     function getHegicPremium(expiry, strike) {
-        uint256 impliedVolatility = getImpliedVolatility();
+        uint256 impliedVolatility = getHegicImpliedVolatility();
         uint256 ETHPrice = getETHPrice();
         uint256 premiumToPayInETH = sqrt(expiry).mul(impliedVolatility).mul(strike.div(ETHPrice));
         return premiumToPayInETH;
