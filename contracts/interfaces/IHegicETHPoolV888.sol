@@ -1,53 +1,94 @@
 pragma solidity ^0.6.0;
 
 interface IHegicETHPoolV888 {
-    struct LockedLiquidity {
-        uint256 amount;
-        uint256 premium;
-        bool locked;
-    }
+    function INITIAL_RATE() external view returns (uint256);
 
-    event Profit(uint256 indexed id, uint256 amount);
-    event Loss(uint256 indexed id, uint256 amount);
-    event Provide(address indexed account, uint256 amount, uint256 writeAmount);
-    event Withdraw(
-        address indexed account,
-        uint256 amount,
-        uint256 writeAmount
-    );
+    function _revertTransfersInLockUpPeriod(address)
+        external
+        view
+        returns (bool);
 
-    function unlock(uint256 id) external;
+    function allowance(address owner, address spender)
+        external
+        view
+        returns (uint256);
 
-    function send(
-        uint256 id,
-        address payable account,
+    function approve(address spender, uint256 amount) external returns (bool);
+
+    function balanceOf(address account) external view returns (uint256);
+
+    function decimals() external view returns (uint8);
+
+    function decreaseAllowance(address spender, uint256 subtractedValue)
+        external
+        returns (bool);
+
+    function increaseAllowance(address spender, uint256 addedValue)
+        external
+        returns (bool);
+
+    function lastProvideTimestamp(address) external view returns (uint256);
+
+    function lockedAmount() external view returns (uint256);
+
+    function lockedLiquidity(uint256)
+        external
+        view
+        returns (
+            uint256 amount,
+            uint256 premium,
+            bool locked
+        );
+
+    function lockedPremium() external view returns (uint256);
+
+    function lockupPeriod() external view returns (uint256);
+
+    function name() external view returns (string);
+
+    function owner() external view returns (address);
+
+    function renounceOwnership() external;
+
+    function symbol() external view returns (string);
+
+    function totalSupply() external view returns (uint256);
+
+    function transfer(address recipient, uint256 amount)
+        external
+        returns (bool);
+
+    function transferFrom(
+        address sender,
+        address recipient,
         uint256 amount
-    ) external;
+    ) external returns (bool);
+
+    function transferOwnership(address newOwner) external;
 
     function setLockupPeriod(uint256 value) external;
 
-    function totalBalance() external view returns (uint256 amount);
-
     function revertTransfersInLockUpPeriod(bool value) external;
 
-    function provide(uint256 minMint) external payable returns (uint256 mint);
+    function provide(uint256 minMint) external returns (uint256 mint);
 
     function withdraw(uint256 amount, uint256 maxBurn)
         external
         returns (uint256 burn);
 
-    function lock(uint256 id, uint256 amount) external payable onlyOwner;
+    function lock(uint256 id, uint256 amount) external;
+
+    function unlock(uint256 id) external;
+
+    function send(
+        uint256 id,
+        address to,
+        uint256 amount
+    ) external;
 
     function shareOf(address account) external view returns (uint256 share);
 
-    function availableBalance() public view returns (uint256 balance);
+    function availableBalance() external view returns (uint256 balance);
 
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256
-    ) internal;
-
-    function divCeil(uint256 a, uint256 b) internal pure returns (uint256);
+    function totalBalance() external view returns (uint256 balance);
 }
-
