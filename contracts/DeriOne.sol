@@ -33,6 +33,15 @@ contract DeriOne is Ownable {
     event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
     event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
     event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
+    constructor(_ETHPriceOracleAddress, _hegicETHOptionV888Address, _hegicETHPoolV888Address, _opynExchangeV1Address, _opynOptionsFactoryV1Address, _opynOTokenV1Address) {
+        setETHPriceOracleAddress(_ETHPriceOracleAddress);
+        setHegicETHOptionV888Address(_hegicETHOptionV888Address);
+        setHegicETHPoolV888Address(_hegicETHPoolV888Address);
+        setOpynExchangeV1Address(_opynExchangeV1Address);
+        setOpynOptionsFactoryV1Address(_opynOptionsFactoryV1Address);
+        setOpynOTokenV1Address(_opynOTokenV1Address)
+    }
+
     setETHPriceOracleAddress(address _ETHPriceOracleAddress) public onlyOwner {
         ETHPriceOracleAddress = _ETHPriceOracleAddress;
         IETHPriceOracleInstance = IETHPriceOracle(ETHPriceOracleAddress);
