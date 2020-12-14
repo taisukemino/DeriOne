@@ -135,6 +135,25 @@ contract DeriOne is Ownable {
         uint256 ETHPrice = getETHPrice();
         uint256 premiumToPayInETH = sqrt(expiry).mul(impliedVolatility).mul(strike.div(ETHPrice));
         return premiumToPayInETH;
+
+    /// @notice creates a new option in Hegic V888
+    /// @param expiry option period in seconds (1 days <= period <= 4 weeks)
+    /// @param amount option amount
+    /// @param strike strike price of the option
+    function BuyETHPutOptionInHegicV888(uint256 expiry, uint256 amount, uint256 strike) {
+        IHegicETHOptionV888Instance.create(expiry, amount, strike, OptionType.Put);
+    }
+
+    /// @notice buy an ETH put option in Opyn V1 
+    /// @param receiver the account that will receive the oTokens
+    /// @param oTokenAddress the address of the oToken that is being bought
+    /// @param paymentTokenAddress the address of the token you are paying for oTokens with
+    /// @param oTokensToBuy the number of oTokens to buy
+    function BuyETHPutOptionInOpynV1(address receiver, address oTokenAddress, address paymentTokenAddress, uint256 oTokensToBuy) {
+        IOpynExchangeV1Instance.buyOTokens(receiver, oTokenAddress, paymentTokenAddress, oTokensToBuy)
+    }
+
+
     /// @notice check if there is enough liquidity in Hegic pool
     /// @param optionSize the size of an option to buy
     function hasEnoughETHLiquidityInHegicV888(uint256 optionSize) {
