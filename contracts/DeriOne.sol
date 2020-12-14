@@ -128,7 +128,31 @@ contract DeriOne is Ownable {
     function getOTokenAddressList() public onlyOwner {
         oTokenAddressList = IOpynOptionsFactoryV1Instance.optionsContracts();
     }
-    /// @notice get the premium in opyn
+
+    /// @notice get the list of WETH put option oToken addresses
+    /// @dev in the Opyn V1, there are only put options and thus no need to filter a type 
+    /// @dev we don't use ETH put options because the Opyn V1 has vulnerability there 
+    function getWETHPutOptionsOTokenAddressList() public onlyOwner {
+        for (uint i = 0; i < oTokenAddressList.length; i++) {
+            IOpynOTokenV1Instance = setOpynOTokenV1Address(oTokenAddressList[i])
+            if (IOpynOTokenV1Instance.underlying() == WETHTokenAddress
+            && IOpynOTokenV1Instance.expiry() > block.timestamp) {
+                WETHPutOptionOTokenAddressList.push(oTokenAddressList[i]);
+            } else {
+                emit NotWETHPutOptionsOTokenAddress(oTokenAddressList[i]);
+            }
+        }
+    }
+
+    function filterWETHPutOptionsOTokenAddresses(uint256 minExpiry, uint256 maxExpiry, uint256 strike) {
+        for (uint i = 0; i < WETHPutOptionOTokenListV1.length; i++) {
+            IOpynOTokenV1Instance = setOpynOTokenV1Address(WETHPutOptionOTokenListV1[i]);
+            if( minExpiry < IOpynOTokenV1Instance.expiry < maxExpiry && IOpynOTokenV1Instance.strike == strike ) {
+                filteredWETHPutOptionOTokenAddressList.push(WETHPutOptionOTokenListV1[i]);
+            }
+        }
+    }
+
     /// @notice get the premium in the Opyn V1
     /// @param oTokenAddress oToken contract's address.
     /// @param oTokensToBuy the amount of oTokens to buy
