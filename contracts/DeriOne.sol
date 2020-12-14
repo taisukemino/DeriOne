@@ -74,6 +74,8 @@ contract DeriOne is Ownable {
     event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
     event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
     constructor(_ETHPriceOracleAddress, _hegicETHOptionV888Address, _hegicETHPoolV888Address, _opynExchangeV1Address, _opynOptionsFactoryV1Address, _opynOTokenV1Address) {
+    event NotWETHPutOptionsOTokenAddress(address oTokenAddress);
+    event NewOptionBought();
         setETHPriceOracleAddress(_ETHPriceOracleAddress);
         setHegicETHOptionV888Address(_hegicETHOptionV888Address);
         setHegicETHPoolV888Address(_hegicETHPoolV888Address);
