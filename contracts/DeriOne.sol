@@ -137,6 +137,16 @@ contract DeriOne is Ownable {
         return premiumToPayInETH;
     }
 
+    function constructFilteredWETHPutOptionOTokenListV1() {
+        for (uint i = 0; i < filteredWETHPutOptionOTokenAddressList.length; i++) {
+            IOpynOTokenV1Instance = setOpynOTokenV1Address(filteredWETHPutOptionOTokenAddressList[i]);
+            filteredWETHPutOptionOTokenListV1[i].address = filteredWETHPutOptionOTokenAddressList[i];
+            filteredWETHPutOptionOTokenListV1[i].expiry = IOpynOTokenV1Instance._expiry;
+            filteredWETHPutOptionOTokenListV1[i].strike = IOpynOTokenV1Instance._strikePrice;
+            filteredWETHPutOptionOTokenListV1[i].premium = getOpynV1Premium(IOpynOTokenV1Instance._expiry, IOpynOTokenV1Instance._strikePrice);
+        }
+    }
+    
     function getTheCheapestETHPutOptionInOpynV1() {
         uint256 minimumPremium = filteredWETHPutOptionOTokenListV1[0].premium;
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
