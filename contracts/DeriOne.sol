@@ -129,11 +129,20 @@ contract DeriOne is Ownable {
         oTokenAddressList = IOpynOptionsFactoryV1Instance.optionsContracts();
     }
     /// @notice get the premium in opyn
+    /// @notice get the premium in the Opyn V1
     /// @param oTokenAddress oToken contract's address.
     /// @param oTokensToBuy the amount of oTokens to buy
     /// @return the premium in ETH
-    function getOpynPremium(oTokenAddress, oTokensToBuy)　{
-        uint256 premiumToPayInETH = IOpynExchangeV1Instance.premiumToPay(oTokenAddress, address(0), oTokensToBuy); 
+    function getOpynV1Premium(uint256 expiry, uint256 strike) {
+        // get oTokenAddress, oTokensToBuy from expiry and strike
+        // how can i get the best option with expiry and option from opyn?
+        for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
+            if(filteredWETHPutOptionOTokenListV1[i].expiry == expiry && filteredWETHPutOptionOTokenListV1[i].strike == strike ) {
+                address oTokenAddress = filteredWETHPutOptionOTokenListV1[i].address;
+            } else {
+            }
+        }
+        uint256 premiumToPayInETH = IOpynExchangeV1Instance.premiumToPay(oTokenAddress, address(0), oTokensToBuy);
         return premiumToPayInETH;
     }
 
