@@ -97,6 +97,22 @@ contract DeriOne is Ownable {
         return premiumToPayInETH;
     }
 
+    function getTheCheapestETHPutOptionInOpynV1() {
+        uint256 minimumPremium = filteredWETHPutOptionOTokenListV1[0].premium;
+        for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
+            if(filteredWETHPutOptionOTokenListV1[i].premium > filteredWETHPutOptionOTokenListV1[i + 1].premium) {
+                minimumPremium = filteredWETHPutOptionOTokenListV1[i + 1].premium;
+            }
+        }
+
+        for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
+            if(minimumPremium == filteredWETHPutOptionOTokenListV1[i].premium) {
+                theCheapestWETHPutOptionInOpynV1 = filteredWETHPutOptionOTokenListV1[i];
+                theCheapestWETHPutOptionInOpynV1.premium = minimumPremium;
+            }
+        }        
+    }
+
     /// @notice get the implied volatility
     function getHegicImpliedVolatility()　{
         uint256 impliedVolatilityRate = IHegicETHOptionV888Instance.impliedVolRate();
@@ -126,7 +142,7 @@ contract DeriOne is Ownable {
         }
     }
 
-    /// @notice calculate the premium in hegic
+    /// @notice calculate the premium and get the cheapest ETH put option in Hegic v888
     /// @param expiry expiration date
     /// @param strike strike/execution price
     /// @dev use the safemath library
@@ -135,6 +151,28 @@ contract DeriOne is Ownable {
         uint256 ETHPrice = getETHPrice();
         uint256 premiumToPayInETH = sqrt(expiry).mul(impliedVolatility).mul(strike.div(ETHPrice));
         return premiumToPayInETH;
+    function getTheCheapestETHPutOptionInHegicV888(uint256 minExpiry, uint256 minStrike) {
+        uint256 impliedVolatility = getHegicV888ImpliedVolatility();
+        uint256 ETHPrice = getHegicV888ETHPrice();
+        uint256 minimumPremiumToPayInETH = sqrt(minExpiry).mul(impliedVolatility).mul(minStrike.div(ETHPrice));
+        theCheapestETHPutOptionInHegicV888.premium = minimumPremiumToPayInETH;
+        theCheapestETHPutOptionInHegicV888.expiry = minExpiry;
+        theCheapestETHPutOptionInHegicV888.strike = minStrike;
+        // does minExpiry and minStrike always give the cheapest premium? why? is this true?
+    }
+
+    /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
+    function getTheCheapestETHPutOption() {
+        if (theCheapestETHPutOptionInHegicV888.premium > theCheapestWETHPutOptionInOpynV1.premium) {
+            theCheapestETHPutOption = theCheapestETHPutOptionInHegicV888;
+            theCheapestETHPutOption.protocol = "hegicV888";
+        } else if (theCheapestETHPutOptionInHegicV888.premium < theCheapestWETHPutOptionInOpynV1.premium) {
+            theCheapestETHPutOption = theCheapestWETHPutOptionInOpynV1;
+            theCheapestETHPutOption.protocol = "opynV1";
+        } else {
+            
+        } 
+    }
 
     /// @notice creates a new option in Hegic V888
     /// @param expiry option period in seconds (1 days <= period <= 4 weeks)
