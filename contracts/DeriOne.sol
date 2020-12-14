@@ -26,6 +26,34 @@ contract DeriOne is Ownable {
     address constant WETHTokenAddress = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
 
     address oTokenAddressList [];
+    struct TheCheapestWETHPutOptionInOpynV1 {
+        address oTokenAddress;
+        address paymentTokenAddress;
+        uint256 expiry;
+        uint256 strike;
+        uint256 amount;
+        uint256 premium;
+    }
+    TheCheapestWETHPutOptionInOpynV1 theCheapestWETHPutOptionInOpynV1;
+
+    struct TheCheapestETHPutOptionInHegicV888 {
+        uint256 expiry;
+        uint256 strike;
+        uint256 amount;
+        uint256 premium;
+    }
+    TheCheapestETHPutOptionInHegicV888 theCheapestETHPutOptionInHegicV888;
+
+    struct TheCheapestETHPutOption {
+        string protocol;
+        address oTokenAddress;
+        address paymentTokenAddress;
+        uint256 expiry;
+        uint256 strike;
+        uint256 amount;
+        uint256 premium;
+    }
+    TheCheapestETHPutOption theCheapestETHPutOption;
 
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
     event NewHegicETHOptionV888AddressRegistered(address hegicETHOptionV888Address);
