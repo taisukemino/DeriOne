@@ -26,6 +26,18 @@ contract DeriOne is Ownable {
     address constant WETHTokenAddress = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
 
     address oTokenAddressList [];
+    address WETHPutOptionOTokenAddressList [];
+    address filteredWETHPutOptionOTokenAddressList [];
+
+    struct WETHPutOptionOTokensV1 {
+        address address;
+        uint256 expiry;
+        uint256 strike;
+        uint256 premium;
+    }
+    WETHPutOptionOTokensV1[] WETHPutOptionOTokenListV1;
+    WETHPutOptionOTokensV1[] filteredWETHPutOptionOTokenListV1;
+
     struct TheCheapestWETHPutOptionInOpynV1 {
         address oTokenAddress;
         address paymentTokenAddress;
