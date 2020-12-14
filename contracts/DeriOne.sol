@@ -13,6 +13,7 @@ import "./interfaces/IOpynOTokenV1.sol";
 /// @title A contract for getting the best options price
 /// @notice For now, this contract gets the best ETH/WETH put options price from Opyn and Hegic
 contract DeriOne is Ownable {
+
     using SafeMath for uint256;
 
     IETHPriceOracle private IETHPriceOracleInstance;
@@ -295,16 +296,34 @@ contract DeriOne is Ownable {
         // optionSize needs to be smaller than oTokenLiquidity and that is in ETH
     }
 
-    /// @notice buy the best ETH put option 
+    /// @notice buy the best ETH put option
     /// @param receiver the account that will receive the oTokens
-    function buyTheCheapestETHPutOption(receiver) {
+    function buyTheCheapestETHPutOption(address receiver) {
         getTheCheapestETHPutOption();
-        if(theCheapestETHPutOption.protocol == "hegicV888") {
-            require(hasEnoughETHLiquidityInHegicV888(theCheapestETHPutOption.amount) == true, "your size is too big");
-            BuyETHPutOptionInHegicV888(theCheapestETHPutOption.expiry, theCheapestETHPutOption.amount, theCheapestETHPutOption.strike);
-        } else if(theCheapestETHPutOption.protocol == "opynV1") {
-            require(hasEnoughETHLiquidityInOpynV1(theCheapestETHPutOption.amount) == true, "your size is too big");
-            BuyETHPutOptionInOpynV1(receiver, theCheapestETHPutOption.oTokenAddress, theCheapestETHPutOption.paymentTokenAddress, theCheapestETHPutOption.amount);
+        if (theCheapestETHPutOption.protocol == "hegicV888") {
+            require(
+                hasEnoughETHLiquidityInHegicV888(
+                    theCheapestETHPutOption.amount
+                ) == true,
+                "your size is too big"
+            );
+            BuyETHPutOptionInHegicV888(
+                theCheapestETHPutOption.expiry,
+                theCheapestETHPutOption.amount,
+                theCheapestETHPutOption.strike
+            );
+        } else if (theCheapestETHPutOption.protocol == "opynV1") {
+            require(
+                hasEnoughETHLiquidityInOpynV1(theCheapestETHPutOption.amount) ==
+                    true,
+                "your size is too big"
+            );
+            BuyETHPutOptionInOpynV1(
+                receiver,
+                theCheapestETHPutOption.oTokenAddress,
+                theCheapestETHPutOption.paymentTokenAddress,
+                theCheapestETHPutOption.amount
+            );
         } else {
             // there is no options
         }
