@@ -11,7 +11,7 @@ import "./interfaces/IOpynOTokenV1.sol";
 
 /// @author tai
 /// @title A contract for getting the best options price
-/// @notice For now, this contract gets the best ETH put options price from Opyn and Hegic
+/// @notice For now, this contract gets the best ETH/WETH put options price from Opyn and Hegic
 contract DeriOne is Ownable {
     using SafeMath for uint256;
 
@@ -73,9 +73,10 @@ contract DeriOne is Ownable {
     event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
     event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
     event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
-    constructor(_ETHPriceOracleAddress, _hegicETHOptionV888Address, _hegicETHPoolV888Address, _opynExchangeV1Address, _opynOptionsFactoryV1Address, _opynOTokenV1Address) {
     event NotWETHPutOptionsOTokenAddress(address oTokenAddress);
     event NewOptionBought();
+
+    constructor(address _ETHPriceOracleAddress, address _hegicETHOptionV888Address, address _hegicETHPoolV888Address, address _opynExchangeV1Address, address _opynOptionsFactoryV1Address, address _opynOTokenV1Address) {
         setETHPriceOracleAddress(_ETHPriceOracleAddress);
         setHegicETHOptionV888Address(_hegicETHOptionV888Address);
         setHegicETHPoolV888Address(_hegicETHPoolV888Address);
@@ -199,13 +200,13 @@ contract DeriOne is Ownable {
     }
 
     /// @notice get the implied volatility
-    function getHegicImpliedVolatility()　{
+    function getHegicV888ImpliedVolatility() {
         uint256 impliedVolatilityRate = IHegicETHOptionV888Instance.impliedVolRate();
         return impliedVolatilityRate;
     }
 
     /// @notice get the underlying asset price
-    function getHegicETHPrice()　{
+    function getHegicV888ETHPrice() {
         (, int latestPrice, , , ) = IETHPriceOracleInstance.latestRoundData();
         uint256 ETHPrice = uint256(latestPrice);
         return ETHPrice;
@@ -230,12 +231,6 @@ contract DeriOne is Ownable {
     /// @notice calculate the premium and get the cheapest ETH put option in Hegic v888
     /// @param expiry expiration date
     /// @param strike strike/execution price
-    /// @dev use the safemath library
-    function getHegicPremium(expiry, strike) {
-        uint256 impliedVolatility = getHegicImpliedVolatility();
-        uint256 ETHPrice = getETHPrice();
-        uint256 premiumToPayInETH = sqrt(expiry).mul(impliedVolatility).mul(strike.div(ETHPrice));
-        return premiumToPayInETH;
     function getTheCheapestETHPutOptionInHegicV888(uint256 minExpiry, uint256 minStrike) {
         uint256 impliedVolatility = getHegicV888ImpliedVolatility();
         uint256 ETHPrice = getHegicV888ETHPrice();
