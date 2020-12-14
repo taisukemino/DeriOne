@@ -135,5 +135,18 @@ contract DeriOne is Ownable {
         uint256 ETHPrice = getETHPrice();
         uint256 premiumToPayInETH = sqrt(expiry).mul(impliedVolatility).mul(strike.div(ETHPrice));
         return premiumToPayInETH;
+    /// @notice buy the best ETH put option 
+    /// @param receiver the account that will receive the oTokens
+    function buyTheCheapestETHPutOption(receiver) {
+        getTheCheapestETHPutOption();
+        if(theCheapestETHPutOption.protocol == "hegicV888") {
+            require(hasEnoughETHLiquidityInHegicV888(theCheapestETHPutOption.amount) == true, "your size is too big");
+            BuyETHPutOptionInHegicV888(theCheapestETHPutOption.expiry, theCheapestETHPutOption.amount, theCheapestETHPutOption.strike);
+        } else if(theCheapestETHPutOption.protocol == "opynV1") {
+            require(hasEnoughETHLiquidityInOpynV1(theCheapestETHPutOption.amount) == true, "your size is too big");
+            BuyETHPutOptionInOpynV1(receiver, theCheapestETHPutOption.oTokenAddress, theCheapestETHPutOption.paymentTokenAddress, theCheapestETHPutOption.amount);
+        } else {
+            // there is no options
+        }
     }
 }
