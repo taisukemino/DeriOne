@@ -1,4 +1,4 @@
-pragma solidity 0.6.0;
+pragma solidity ^0.6.0;
 
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -190,7 +190,7 @@ contract DeriOne is Ownable {
     /// @param expiry expiration date
     /// @param strike strike price
     /// @return the premium in ETH
-    function getOpynV1Premium(uint256 expiry, uint256 strike) {
+    function getOpynV1Premium(uint256 expiry, uint256 strike, uint256 oTokensToBuy) {
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             if(filteredWETHPutOptionOTokenListV1[i].expiry == expiry && filteredWETHPutOptionOTokenListV1[i].strike == strike ) {
                 address oTokenAddress = filteredWETHPutOptionOTokenListV1[i].address;
