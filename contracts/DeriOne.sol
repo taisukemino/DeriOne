@@ -8,6 +8,7 @@ import "./interfaces/IHegicETHPoolV888.sol";
 import "./interfaces/IOpynExchangeV1.sol";
 import "./interfaces/IOpynOptionsFactoryV1.sol";
 import "./interfaces/IOpynOTokenV1.sol";
+import "./interfaces/IUniswapFactoryV1.sol";
 
 /// @author tai
 /// @title A contract for getting the best options price
@@ -22,6 +23,7 @@ contract DeriOne is Ownable {
     IOpynExchangeV1 private IOpynExchangeV1Instance;
     IOpynOptionsFactoryV1 private IOpynOptionsFactoryV1Instance;
     IOpynOTokenV1 private IOpynOTokenV1Instance;
+    IUniswapFactoryV1 private IUniswapFactoryV1Instance;
 
     address constant USDCTokenAddress = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
     address constant WETHTokenAddress = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
@@ -74,16 +76,18 @@ contract DeriOne is Ownable {
     event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
     event NewOpynOptionsFactoryV1AddressRegistered(address opynOptionsFactoryV1Address);
     event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
+    event NewUniswapFactoryV1AddressRegistered(address uniswapFactoryV1Address);
     event NotWETHPutOptionsOTokenAddress(address oTokenAddress);
     event NewOptionBought();
 
-    constructor(address _ETHPriceOracleAddress, address _hegicETHOptionV888Address, address _hegicETHPoolV888Address, address _opynExchangeV1Address, address _opynOptionsFactoryV1Address, address _opynOTokenV1Address) {
+    constructor(address _ETHPriceOracleAddress, address _hegicETHOptionV888Address, address _hegicETHPoolV888Address, address _opynExchangeV1Address, address _opynOptionsFactoryV1Address, address _opynOTokenV1Address, address _uniswapFactoryV1Address) {
         setETHPriceOracleAddress(_ETHPriceOracleAddress);
         setHegicETHOptionV888Address(_hegicETHOptionV888Address);
         setHegicETHPoolV888Address(_hegicETHPoolV888Address);
         setOpynExchangeV1Address(_opynExchangeV1Address);
         setOpynOptionsFactoryV1Address(_opynOptionsFactoryV1Address);
         setOpynOTokenV1Address(_opynOTokenV1Address)
+        setUniswapFactoryV1Address(_uniswapFactoryV1Address)
     }
 
     setETHPriceOracleAddress(address _ETHPriceOracleAddress) public onlyOwner {
@@ -126,6 +130,13 @@ contract DeriOne is Ownable {
         IOpynOTokenV1Instance = IOpynOTokenV1(opynOTokenV1Address);
 
         emit NewOpynOTokenV1AddressRegistered(opynOTokenV1Address);
+    }
+
+    setUniswapFactoryV1Address(address _uniswapFactoryV1Address) public onlyOwner {
+        uniswapFactoryV1Address = _uniswapFactoryV1Address;
+        IUniswapFactoryV1Instance = IUniswapFactoryV1(uniswapFactoryV1Address);
+
+        emit NewUniswapFactoryV1AddressRegistered(uniswapFactoryV1Address);
     }
 
     /// @notice get the list of oToken addresses
