@@ -31,6 +31,9 @@ contract DeriOne is Ownable {
     address[] private WETHPutOptionOTokenAddressList;
     address[] private filteredWETHPutOptionOTokenAddressList;
 
+    enum OptionType {Invalid, Put, Call}
+    OptionType private optionType;
+
     struct WETHPutOptionOTokensV1 {
         address oTokenAddress;
         uint256 expiry;
@@ -377,7 +380,7 @@ contract DeriOne is Ownable {
             expiry,
             amount,
             strike,
-            OptionType.Put
+            optionType.Put
         );
     }
 
