@@ -295,16 +295,17 @@ contract DeriOne is Ownable {
         }
     }
 
-    /// @notice check if there is enough liquidity in Opyn pool
+    /// @notice check if there is enough liquidity in Opyn V1 pool
     function hasEnoughETHLiquidityInOpynV1(uint256 optionSizeInETH) {
-        uint256 oTokenLiquidity = IOpynOTokenV1Instance.
+        address uniswapExchangeContractAddress = IUniswapFactoryV1Instance.getExchange(theCheapestETHPutOption.oTokenAddress);
+        IOpynOTokenV1Instance = setOpynOTokenV1Address(theCheapestETHPutOption.oTokenAddress)
+        uint256 oTokenLiquidity = IOpynOTokenV1Instance.balanceOf(uniswapExchangeContractAddress);
         uint256 optionSizeInOToken = optionSizeInETH.mul(IOpynOTokenV1Instance.oTokenExchangeRate());
-        if (oTokenLiquidity > 0) {
+        if (0 < optionSizeInOToken < oTokenLiquidity) {
             return true;
         } else {
             return false;
         }
-        // optionSize needs to be smaller than oTokenLiquidity and that is in ETH
     }
 
     /// @notice buy the best ETH put option
