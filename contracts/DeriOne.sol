@@ -1,7 +1,7 @@
 pragma solidity ^0.6.0;
 
-import "openzeppelin-solidity/contracts/access/Ownable.sol";
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./interfaces/IETHPriceOracle.sol";
 import "./interfaces/IHegicETHOptionV888.sol";
 import "./interfaces/IHegicETHPoolV888.sol";
@@ -28,12 +28,12 @@ contract DeriOne is Ownable {
     address constant USDCTokenAddress = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
     address constant WETHTokenAddress = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
 
-    address oTokenAddressList [];
-    address WETHPutOptionOTokenAddressList [];
-    address filteredWETHPutOptionOTokenAddressList [];
+    address[] private oTokenAddressList;
+    address[] private WETHPutOptionOTokenAddressList;
+    address[] private filteredWETHPutOptionOTokenAddressList;
 
     struct WETHPutOptionOTokensV1 {
-        address address;
+        address oTokenAddress;
         uint256 expiry;
         uint256 strike;
         uint256 premium;
@@ -86,71 +86,57 @@ contract DeriOne is Ownable {
         setHegicETHPoolV888Address(_hegicETHPoolV888Address);
         setOpynExchangeV1Address(_opynExchangeV1Address);
         setOpynOptionsFactoryV1Address(_opynOptionsFactoryV1Address);
-        setOpynOTokenV1Address(_opynOTokenV1Address)
-        setUniswapFactoryV1Address(_uniswapFactoryV1Address)
+        setOpynOTokenV1Address(_opynOTokenV1Address);
+        setUniswapFactoryV1Address(_uniswapFactoryV1Address);
     }
 
     /// @notice instantiate the ETHPriceOracle contract
     /// @param _ETHPriceOracleAddress ETHPriceOracleAddress
-    setETHPriceOracleAddress(address _ETHPriceOracleAddress) public onlyOwner {
-        ETHPriceOracleAddress = _ETHPriceOracleAddress;
-        IETHPriceOracleInstance = IETHPriceOracle(ETHPriceOracleAddress);
-
-        emit NewETHPriceOracleAddressRegistered(ETHPriceOracleAddress);
+    function setETHPriceOracleAddress(address _ETHPriceOracleAddress) public onlyOwner {
+        IETHPriceOracleInstance = IETHPriceOracle(_ETHPriceOracleAddress);
+        emit NewETHPriceOracleAddressRegistered(_ETHPriceOracleAddress);
     }
 
     /// @notice instantiate the HegicETHOptionV888 contract
     /// @param _hegicETHOptionV888Address HegicETHOptionV888Address
-    setHegicETHOptionV888Address(address _hegicETHOptionV888Address) public onlyOwner {
-        hegicETHOptionV888Address = _hegicETHOptionV888Address;
-        IHegicETHOptionV888Instance = IHegicETHOptionV888(hegicETHOptionV888Address);
-
-        emit NewHegicETHOptionV888AddressRegistered(hegicETHOptionV888Address);
+    function setHegicETHOptionV888Address(address _hegicETHOptionV888Address) public onlyOwner {
+        IHegicETHOptionV888Instance = IHegicETHOptionV888(_hegicETHOptionV888Address);
+        emit NewHegicETHOptionV888AddressRegistered(_hegicETHOptionV888Address);
     }
 
     /// @notice instantiate the HegicETHPoolV888 contract
     /// @param _hegicETHPoolV888Address HegicETHPoolV888Address
-    setHegicETHPoolV888Address(address _hegicETHPoolV888Address) public onlyOwner {
-        hegicETHPoolV888Address = _hegicETHPoolV888Address;
-        IHegicETHPoolV888Instance = IHegicETHPoolV888(hegicETHPoolV888Address);
-
-        emit NewHegicETHPoolV888AddressRegistered(hegicETHPoolV888Address);
+    function setHegicETHPoolV888Address(address _hegicETHPoolV888Address) public onlyOwner {
+        IHegicETHPoolV888Instance = IHegicETHPoolV888(_hegicETHPoolV888Address);
+        emit NewHegicETHPoolV888AddressRegistered(_hegicETHPoolV888Address);
     }
 
     /// @notice instantiate the OpynExchangeV1 contract
     /// @param _opynExchangeV1Address OpynExchangeV1Address
-    setOpynExchangeV1Address(address _opynExchangeV1Address) public onlyOwner {
-        opynExchangeV1Address = _opynExchangeV1Address;
-        IOpynExchangeV1Instance = IOpynExchangeV1(opynExchangeV1Address);
-
-        emit NewOpynExchangeV1AddressRegistered(opynExchangeV1Address);
+    function setOpynExchangeV1Address(address _opynExchangeV1Address) public onlyOwner {
+        IOpynExchangeV1Instance = IOpynExchangeV1(_opynExchangeV1Address);
+        emit NewOpynExchangeV1AddressRegistered(_opynExchangeV1Address);
     }
 
     /// @notice instantiate the OpynOptionsFactoryV1 contract
     /// @param _opynOptionsFactoryV1Address OpynOptionsFactoryV1Address
-    setOpynOptionsFactoryV1Address(address _opynOptionsFactoryV1Address) public onlyOwner {
-        opynOptionsFactoryV1Address = _opynOptionsFactoryV1Address;
-        IOpynOptionsFactoryV1Instance = IOpynExchangeV1(opynOptionsFactoryV1Address);
-
-        emit NewOpynOptionsFactoryV1AddressRegistered(opynOptionsFactoryV1Address);
+    function setOpynOptionsFactoryV1Address(address _opynOptionsFactoryV1Address) public onlyOwner {
+        IOpynOptionsFactoryV1Instance = IOpynExchangeV1(_opynOptionsFactoryV1Address);
+        emit NewOpynOptionsFactoryV1AddressRegistered(_opynOptionsFactoryV1Address);
     }
 
     /// @notice instantiate the OpynOTokenV1 contract
     /// @param _opynOTokenV1Address OpynOTokenV1Address
-    setOpynOTokenV1Address(address _opynOTokenV1Address) public onlyOwner {
-        opynOTokenV1Address = _opynOTokenV1Address;
-        IOpynOTokenV1Instance = IOpynOTokenV1(opynOTokenV1Address);
-
-        emit NewOpynOTokenV1AddressRegistered(opynOTokenV1Address);
+    function setOpynOTokenV1Address(address _opynOTokenV1Address) public onlyOwner {
+        IOpynOTokenV1Instance = IOpynOTokenV1(_opynOTokenV1Address);
+        emit NewOpynOTokenV1AddressRegistered(_opynOTokenV1Address);
     }
 
     /// @notice instantiate the UniswapFactoryV1 contract
     /// @param _uniswapFactoryV1Address UniswapFactoryV1Address
-    setUniswapFactoryV1Address(address _uniswapFactoryV1Address) public onlyOwner {
-        uniswapFactoryV1Address = _uniswapFactoryV1Address;
-        IUniswapFactoryV1Instance = IUniswapFactoryV1(uniswapFactoryV1Address);
-
-        emit NewUniswapFactoryV1AddressRegistered(uniswapFactoryV1Address);
+    function setUniswapFactoryV1Address(address _uniswapFactoryV1Address) public onlyOwner {
+        IUniswapFactoryV1Instance = IUniswapFactoryV1(_uniswapFactoryV1Address);
+        emit NewUniswapFactoryV1AddressRegistered(_uniswapFactoryV1Address);
     }
 
     /// @notice get the list of oToken addresses
@@ -163,9 +149,8 @@ contract DeriOne is Ownable {
     /// @dev we don't use ETH put options because the Opyn V1 has vulnerability there 
     function getWETHPutOptionsOTokenAddressList() public onlyOwner {
         for (uint256 i = 0; i < oTokenAddressList.length; i++) {
-            IOpynOTokenV1Instance = setOpynOTokenV1Address(oTokenAddressList[i])
-            if (IOpynOTokenV1Instance.underlying() == WETHTokenAddress
-            && IOpynOTokenV1Instance.expiry() > block.timestamp) {
+            IOpynOTokenV1Instance = setOpynOTokenV1Address(oTokenAddressList[i]);
+            if (IOpynOTokenV1Instance.underlying() == WETHTokenAddress && IOpynOTokenV1Instance.expiry() > block.timestamp) {
                 WETHPutOptionOTokenAddressList.push(oTokenAddressList[i]);
             } else {
                 emit NotWETHPutOptionsOTokenAddress(oTokenAddressList[i]);
@@ -193,7 +178,7 @@ contract DeriOne is Ownable {
     function getOpynV1Premium(uint256 expiry, uint256 strike, uint256 oTokensToBuy) {
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             if(filteredWETHPutOptionOTokenListV1[i].expiry == expiry && filteredWETHPutOptionOTokenListV1[i].strike == strike ) {
-                address oTokenAddress = filteredWETHPutOptionOTokenListV1[i].address;
+                address oTokenAddress = filteredWETHPutOptionOTokenListV1[i].oTokenAddress;
             } else {
             }
         }
@@ -204,7 +189,7 @@ contract DeriOne is Ownable {
     function constructFilteredWETHPutOptionOTokenListV1() {
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenAddressList.length; i++) {
             IOpynOTokenV1Instance = setOpynOTokenV1Address(filteredWETHPutOptionOTokenAddressList[i]);
-            filteredWETHPutOptionOTokenListV1[i].address = filteredWETHPutOptionOTokenAddressList[i];
+            filteredWETHPutOptionOTokenListV1[i].oTokenAddress = filteredWETHPutOptionOTokenAddressList[i];
             filteredWETHPutOptionOTokenListV1[i].expiry = IOpynOTokenV1Instance._expiry;
             filteredWETHPutOptionOTokenListV1[i].strike = IOpynOTokenV1Instance._strikePrice;
             filteredWETHPutOptionOTokenListV1[i].premium = getOpynV1Premium(IOpynOTokenV1Instance._expiry, IOpynOTokenV1Instance._strikePrice);
@@ -257,8 +242,9 @@ contract DeriOne is Ownable {
     }
 
     /// @notice calculate the premium and get the cheapest ETH put option in Hegic v888
-    /// @param expiry expiration date
-    /// @param strike strike/execution price
+    /// @param minExpiry minimum expiration date
+    /// @param minStrike minimum strike price
+    /// @dev does minExpiry and minStrike always give the cheapest premium? why? is this true?
     function getTheCheapestETHPutOptionInHegicV888(uint256 minExpiry, uint256 minStrike) {
         uint256 impliedVolatility = getHegicV888ImpliedVolatility();
         uint256 ETHPrice = getHegicV888ETHPrice();
@@ -266,7 +252,6 @@ contract DeriOne is Ownable {
         theCheapestETHPutOptionInHegicV888.premium = minimumPremiumToPayInETH;
         theCheapestETHPutOptionInHegicV888.expiry = minExpiry;
         theCheapestETHPutOptionInHegicV888.strike = minStrike;
-        // does minExpiry and minStrike always give the cheapest premium? why? is this true?
     }
 
     /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
@@ -296,7 +281,7 @@ contract DeriOne is Ownable {
     /// @param paymentTokenAddress the address of the token you are paying for oTokens with
     /// @param oTokensToBuy the number of oTokens to buy
     function BuyETHPutOptionInOpynV1(address receiver, address oTokenAddress, address paymentTokenAddress, uint256 oTokensToBuy) {
-        IOpynExchangeV1Instance.buyOTokens(receiver, oTokenAddress, paymentTokenAddress, oTokensToBuy)
+        IOpynExchangeV1Instance.buyOTokens(receiver, oTokenAddress, paymentTokenAddress, oTokensToBuy);
     }
 
     /// @notice check if there is enough liquidity in Hegic pool
@@ -314,7 +299,7 @@ contract DeriOne is Ownable {
     /// @param optionSizeInETH the size of an option to buy in ETH
     function hasEnoughOTokenLiquidityInOpynV1(uint256 optionSizeInETH) {
         address uniswapExchangeContractAddress = IUniswapFactoryV1Instance.getExchange(theCheapestETHPutOption.oTokenAddress);
-        IOpynOTokenV1Instance = setOpynOTokenV1Address(theCheapestETHPutOption.oTokenAddress)
+        IOpynOTokenV1Instance = setOpynOTokenV1Address(theCheapestETHPutOption.oTokenAddress);
         uint256 oTokenLiquidity = IOpynOTokenV1Instance.balanceOf(uniswapExchangeContractAddress);
         uint256 optionSizeInOToken = optionSizeInETH.mul(IOpynOTokenV1Instance.oTokenExchangeRate());
         if (0 < optionSizeInOToken < oTokenLiquidity) {
