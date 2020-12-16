@@ -359,14 +359,28 @@ contract DeriOne is Ownable {
             theCheapestETHPutOptionInHegicV888.premium >
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
-            theCheapestETHPutOption = theCheapestETHPutOptionInHegicV888;
-            theCheapestETHPutOption.protocol = HegicV888;
+            theCheapestETHPutOption = TheCheapestETHPutOption(
+                HegicV888,
+                address(0),
+                address(0),
+                theCheapestETHPutOptionInHegicV888.expiry,
+                theCheapestETHPutOptionInHegicV888.strike,
+                theCheapestETHPutOptionInHegicV888.premium,
+                0
+            );
         } else if (
             theCheapestETHPutOptionInHegicV888.premium <
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
-            theCheapestETHPutOption = theCheapestWETHPutOptionInOpynV1;
-            theCheapestETHPutOption.protocol = OpynV1;
+            theCheapestETHPutOption = TheCheapestETHPutOption(
+                OpynV1,
+                theCheapestWETHPutOptionInOpynV1.oTokenAddress,
+                address(0),
+                theCheapestWETHPutOptionInOpynV1.expiry,
+                theCheapestWETHPutOptionInOpynV1.strike,
+                theCheapestWETHPutOptionInOpynV1.premium,
+                0
+            );
         } else {}
     }
 
