@@ -344,9 +344,11 @@ contract DeriOne is Ownable {
         uint256 minimumPremiumToPayInETH = _sqrt(minExpiry)
             .mul(impliedVolatility)
             .mul(minStrike.div(ETHPrice));
-        theCheapestETHPutOptionInHegicV888.premium = minimumPremiumToPayInETH;
-        theCheapestETHPutOptionInHegicV888.expiry = minExpiry;
-        theCheapestETHPutOptionInHegicV888.strike = minStrike;
+        theCheapestETHPutOptionInHegicV888 = TheCheapestETHPutOptionInHegicV888(
+            minimumPremiumToPayInETH,
+            minExpiry,
+            minStrike
+        );
     }
 
     /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
