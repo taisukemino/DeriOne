@@ -54,7 +54,6 @@ contract DeriOne is Ownable {
     struct TheCheapestETHPutOptionInHegicV888 {
         uint256 expiry;
         uint256 strike;
-        uint256 amount;
         uint256 premium;
     }
     TheCheapestETHPutOptionInHegicV888 theCheapestETHPutOptionInHegicV888;
