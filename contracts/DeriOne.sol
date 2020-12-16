@@ -291,8 +291,12 @@ contract DeriOne is Ownable {
             if (
                 minimumPremium == filteredWETHPutOptionOTokenListV1[i].premium
             ) {
-                theCheapestWETHPutOptionInOpynV1 = filteredWETHPutOptionOTokenListV1[i];
-                theCheapestWETHPutOptionInOpynV1.premium = minimumPremium;
+                theCheapestWETHPutOptionInOpynV1 = TheCheapestWETHPutOptionInOpynV1(
+                    filteredWETHPutOptionOTokenListV1[i].oTokenAddress,
+                    filteredWETHPutOptionOTokenListV1[i].expiry,
+                    filteredWETHPutOptionOTokenListV1[i].strike,
+                    minimumPremium
+                );
             }
         }
     }
