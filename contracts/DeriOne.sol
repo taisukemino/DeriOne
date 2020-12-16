@@ -61,8 +61,9 @@ contract DeriOne is Ownable {
     }
     TheCheapestETHPutOptionInHegicV888 theCheapestETHPutOptionInHegicV888;
 
+    enum Protocol {OpynV1, HegicV888}
     struct TheCheapestETHPutOption {
-        string protocol;
+        Protocol protocol;
         address oTokenAddress;
         address paymentTokenAddress;
         uint256 expiry;
@@ -357,13 +358,13 @@ contract DeriOne is Ownable {
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = theCheapestETHPutOptionInHegicV888;
-            theCheapestETHPutOption.protocol = "hegicV888";
+            theCheapestETHPutOption.protocol = HegicV888;
         } else if (
             theCheapestETHPutOptionInHegicV888.premium <
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = theCheapestWETHPutOptionInOpynV1;
-            theCheapestETHPutOption.protocol = "opynV1";
+            theCheapestETHPutOption.protocol = OpynV1;
         } else {}
     }
 
@@ -447,7 +448,7 @@ contract DeriOne is Ownable {
     /// @param receiver the account that will receive the oTokens
     function buyTheCheapestETHPutOption(address receiver) public {
         getTheCheapestETHPutOption();
-        if (theCheapestETHPutOption.protocol == "hegicV888") {
+        if (theCheapestETHPutOption.protocol == HegicV888) {
             require(
                 _hasEnoughETHLiquidityInHegicV888(
                     theCheapestETHPutOption.amount
@@ -459,7 +460,7 @@ contract DeriOne is Ownable {
                 theCheapestETHPutOption.amount,
                 theCheapestETHPutOption.strike
             );
-        } else if (theCheapestETHPutOption.protocol == "opynV1") {
+        } else if (theCheapestETHPutOption.protocol == OpynV1) {
             require(
                 _hasEnoughOTokenLiquidityInOpynV1(
                     theCheapestETHPutOption.amount
