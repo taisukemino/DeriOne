@@ -264,15 +264,14 @@ contract DeriOne is Ownable {
             IOpynOTokenV1Instance = setOpynOTokenV1Address(
                 filteredWETHPutOptionOTokenAddressList[i]
             );
-            filteredWETHPutOptionOTokenListV1[i]
-                .oTokenAddress = filteredWETHPutOptionOTokenAddressList[i];
-            filteredWETHPutOptionOTokenListV1[i].expiry = IOpynOTokenV1Instance
-                ._expiry;
-            filteredWETHPutOptionOTokenListV1[i].strike = IOpynOTokenV1Instance
-                ._strikePrice;
-            filteredWETHPutOptionOTokenListV1[i].premium = _getOpynV1Premium(
+            filteredWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
+                filteredWETHPutOptionOTokenAddressList[i],
                 IOpynOTokenV1Instance._expiry,
-                IOpynOTokenV1Instance._strikePrice
+                IOpynOTokenV1Instance._strikePrice,
+                _getOpynV1Premium(
+                    IOpynOTokenV1Instance._expiry,
+                    IOpynOTokenV1Instance._strikePrice
+                )
             );
         }
     }
