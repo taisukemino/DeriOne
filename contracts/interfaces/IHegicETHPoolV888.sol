@@ -44,13 +44,13 @@ interface IHegicETHPoolV888 {
 
     function lockupPeriod() external view returns (uint256);
 
-    function name() external view returns (string);
+    function name() external view returns (string memory);
 
     function owner() external view returns (address);
 
     function renounceOwnership() external;
 
-    function symbol() external view returns (string);
+    function symbol() external view returns (string memory);
 
     function totalSupply() external view returns (uint256);
 

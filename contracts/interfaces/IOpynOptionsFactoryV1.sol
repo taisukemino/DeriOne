@@ -1,9 +1,9 @@
 pragma solidity ^0.6.0;
 
 interface IOpynOptionsFactoryV1 {
-    function tokens(string) external view returns (address);
+    function tokens(string memory) external view returns (address);
 
-    function changeAsset(string _asset, address _addr) external;
+    function changeAsset(string memory _asset, address _addr) external;
 
     function optionsExchange() external view returns (address);
 
@@ -16,25 +16,25 @@ interface IOpynOptionsFactoryV1 {
     function isOwner() external view returns (bool);
 
     function createOptionsContract(
-        string _collateralType,
+        string memory _collateralType,
         int32 _collateralExp,
-        string _underlyingType,
+        string memory _underlyingType,
         int32 _underlyingExp,
         int32 _oTokenExchangeExp,
         uint256 _strikePrice,
         int32 _strikeExp,
-        string _strikeAsset,
+        string memory _strikeAsset,
         uint256 _expiry,
         uint256 _windowSize
     ) external returns (address);
 
     function oracleAddress() external view returns (address);
 
-    function addAsset(string _asset, address _addr) external;
+    function addAsset(string memory _asset, address _addr) external;
 
-    function supportsAsset(string _asset) external view returns (bool);
+    function supportsAsset(string memory _asset) external view returns (bool);
 
-    function deleteAsset(string _asset) external;
+    function deleteAsset(string memory _asset) external;
 
     function optionsContracts(uint256) external view returns (address);
 

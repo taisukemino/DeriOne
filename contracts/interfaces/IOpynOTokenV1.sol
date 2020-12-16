@@ -5,9 +5,9 @@ interface IOpynOTokenV1 {
         external
         returns (uint256);
 
-    function getVaultOwners() external view returns (address[]);
+    function getVaultOwners() external view returns (address[] memory);
 
-    function name() external view returns (string);
+    function name() external view returns (string memory);
 
     function approve(address spender, uint256 amount) external returns (bool);
 
@@ -67,7 +67,7 @@ interface IOpynOTokenV1 {
         address receiver
     ) external;
 
-    function exercise(uint256 oTokensToExercise, address[] vaultsToExerciseFrom)
+    function exercise(uint256 oTokensToExercise, address[] memory vaultsToExerciseFrom)
         external
         payable;
 
@@ -108,7 +108,7 @@ interface IOpynOTokenV1 {
 
     function hasExpired() external view returns (bool);
 
-    function symbol() external view returns (string);
+    function symbol() external view returns (string memory);
 
     function addETHCollateral(address vaultOwner)
         external
@@ -141,7 +141,7 @@ interface IOpynOTokenV1 {
 
     function redeemVaultBalance() external;
 
-    function setDetails(string _name, string _symbol) external;
+    function setDetails(string memory _name, string memory _symbol) external;
 
     function addETHCollateralOption(uint256 amtToCreate, address receiver)
         external

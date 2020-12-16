@@ -11,7 +11,7 @@ interface IETHPriceOracle {
 
     function decimals() external view returns (uint8);
 
-    function description() external view returns (string);
+    function description() external view returns (string memory);
 
     function getAnswer(uint256 _roundId) external view returns (int256);
 
