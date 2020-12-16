@@ -34,6 +34,13 @@ contract DeriOne is Ownable {
     enum OptionType {Invalid, Put, Call}
     OptionType private optionType;
 
+    struct TheCheapestETHPutOptionInHegicV888 {
+        uint256 expiry;
+        uint256 strike;
+        uint256 premium;
+    }
+    TheCheapestETHPutOptionInHegicV888 theCheapestETHPutOptionInHegicV888;
+
     struct WETHPutOptionOTokensV1 {
         address oTokenAddress;
         uint256 expiry;
@@ -51,13 +58,6 @@ contract DeriOne is Ownable {
     }
     TheCheapestWETHPutOptionInOpynV1 theCheapestWETHPutOptionInOpynV1;
 
-    struct TheCheapestETHPutOptionInHegicV888 {
-        uint256 expiry;
-        uint256 strike;
-        uint256 premium;
-    }
-    TheCheapestETHPutOptionInHegicV888 theCheapestETHPutOptionInHegicV888;
-
     enum Protocol {OpynV1, HegicV888}
     struct TheCheapestETHPutOption {
         Protocol protocol;
@@ -65,8 +65,8 @@ contract DeriOne is Ownable {
         address paymentTokenAddress;
         uint256 expiry;
         uint256 strike;
-        uint256 amount;
         uint256 premium;
+        uint256 amount;
     }
     TheCheapestETHPutOption theCheapestETHPutOption;
 
@@ -175,6 +175,57 @@ contract DeriOne is Ownable {
     {
         IUniswapFactoryV1Instance = IUniswapFactoryV1(_uniswapFactoryV1Address);
         emit NewUniswapFactoryV1AddressRegistered(_uniswapFactoryV1Address);
+    }
+
+    /// @notice get the implied volatility
+    function _getHegicV888ImpliedVolatility() private {
+        uint256 impliedVolatilityRate = IHegicETHOptionV888Instance
+            .impliedVolRate();
+        return impliedVolatilityRate;
+    }
+
+    /// @notice get the underlying asset price
+    function _getHegicV888ETHPrice() private {
+        (, int256 latestPrice, , , ) = IETHPriceOracleInstance
+            .latestRoundData();
+        uint256 ETHPrice = uint256(latestPrice);
+        return ETHPrice;
+    }
+
+    /// @notice babylonian method
+    /// @param y unsigned integer 256
+    /// modified https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/libraries/Math.sol#L11
+    function _sqrt(uint256 y) private pure returns (uint256 z) {
+        if (y > 3) {
+            z = y;
+            uint256 x = y.div(2) + 1;
+            while (x < z) {
+                z = x;
+                x = (y.div(x) + x).div(2);
+            }
+        } else if (y != 0) {
+            z = 1;
+        }
+    }
+
+    /// @notice calculate the premium and get the cheapest ETH put option in Hegic v888
+    /// @param minExpiry minimum expiration date
+    /// @param minStrike minimum strike price
+    /// @dev does minExpiry and minStrike always give the cheapest premium? why? is this true?
+    function _getTheCheapestETHPutOptionInHegicV888(
+        uint256 minExpiry,
+        uint256 minStrike
+    ) private {
+        uint256 impliedVolatility = _getHegicV888ImpliedVolatility();
+        uint256 ETHPrice = _getHegicV888ETHPrice();
+        uint256 minimumPremiumToPayInETH = _sqrt(minExpiry)
+            .mul(impliedVolatility)
+            .mul(minStrike.div(ETHPrice));
+        theCheapestETHPutOptionInHegicV888 = TheCheapestETHPutOptionInHegicV888(
+            minimumPremiumToPayInETH,
+            minExpiry,
+            minStrike
+        );
     }
 
     /// @notice get the list of oToken addresses
@@ -300,75 +351,11 @@ contract DeriOne is Ownable {
         }
     }
 
-    /// @notice get the implied volatility
-    function _getHegicV888ImpliedVolatility() private {
-        uint256 impliedVolatilityRate = IHegicETHOptionV888Instance
-            .impliedVolRate();
-        return impliedVolatilityRate;
-    }
-
-    /// @notice get the underlying asset price
-    function _getHegicV888ETHPrice() private {
-        (, int256 latestPrice, , , ) = IETHPriceOracleInstance
-            .latestRoundData();
-        uint256 ETHPrice = uint256(latestPrice);
-        return ETHPrice;
-    }
-
-    /// @notice babylonian method
-    /// @param y unsigned integer 256
-    /// modified https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/libraries/Math.sol#L11
-    function _sqrt(uint256 y) private pure returns (uint256 z) {
-        if (y > 3) {
-            z = y;
-            uint256 x = y.div(2) + 1;
-            while (x < z) {
-                z = x;
-                x = (y.div(x) + x).div(2);
-            }
-        } else if (y != 0) {
-            z = 1;
-        }
-    }
-
-    /// @notice calculate the premium and get the cheapest ETH put option in Hegic v888
-    /// @param minExpiry minimum expiration date
-    /// @param minStrike minimum strike price
-    /// @dev does minExpiry and minStrike always give the cheapest premium? why? is this true?
-    function _getTheCheapestETHPutOptionInHegicV888(
-        uint256 minExpiry,
-        uint256 minStrike
-    ) private {
-        uint256 impliedVolatility = _getHegicV888ImpliedVolatility();
-        uint256 ETHPrice = _getHegicV888ETHPrice();
-        uint256 minimumPremiumToPayInETH = _sqrt(minExpiry)
-            .mul(impliedVolatility)
-            .mul(minStrike.div(ETHPrice));
-        theCheapestETHPutOptionInHegicV888 = TheCheapestETHPutOptionInHegicV888(
-            minimumPremiumToPayInETH,
-            minExpiry,
-            minStrike
-        );
-    }
-
     /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
     function getTheCheapestETHPutOption() internal {
         _getTheCheapestETHPutOptionInOpynV1();
         _getTheCheapestETHPutOptionInHegicV888();
         if (
-            theCheapestETHPutOptionInHegicV888.premium >
-            theCheapestWETHPutOptionInOpynV1.premium
-        ) {
-            theCheapestETHPutOption = TheCheapestETHPutOption(
-                HegicV888,
-                address(0),
-                address(0),
-                theCheapestETHPutOptionInHegicV888.expiry,
-                theCheapestETHPutOptionInHegicV888.strike,
-                theCheapestETHPutOptionInHegicV888.premium,
-                0
-            );
-        } else if (
             theCheapestETHPutOptionInHegicV888.premium <
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
@@ -379,6 +366,19 @@ contract DeriOne is Ownable {
                 theCheapestWETHPutOptionInOpynV1.expiry,
                 theCheapestWETHPutOptionInOpynV1.strike,
                 theCheapestWETHPutOptionInOpynV1.premium,
+                0
+            );
+        } else if (
+            theCheapestETHPutOptionInHegicV888.premium >
+            theCheapestWETHPutOptionInOpynV1.premium
+        ) {
+            theCheapestETHPutOption = TheCheapestETHPutOption(
+                HegicV888,
+                address(0),
+                address(0),
+                theCheapestETHPutOptionInHegicV888.expiry,
+                theCheapestETHPutOptionInHegicV888.strike,
+                theCheapestETHPutOptionInHegicV888.premium,
                 0
             );
         } else {}
