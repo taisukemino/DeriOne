@@ -45,10 +45,8 @@ contract DeriOne is Ownable {
 
     struct TheCheapestWETHPutOptionInOpynV1 {
         address oTokenAddress;
-        address paymentTokenAddress;
         uint256 expiry;
         uint256 strike;
-        uint256 amount;
         uint256 premium;
     }
     TheCheapestWETHPutOptionInOpynV1 theCheapestWETHPutOptionInOpynV1;
