@@ -269,7 +269,7 @@ contract DeriOne is Ownable {
             );
             if (
                 minExpiry < IOpynOTokenV1Instance.expiry() < maxExpiry &&
-                IOpynOTokenV1Instance.strike() == strike
+                IOpynOTokenV1Instance.strikePrice() == strike
             ) {
                 filteredWETHPutOptionOTokenAddressList.push(
                     WETHPutOptionOTokenListV1[i].oTokenAddress
@@ -317,10 +317,10 @@ contract DeriOne is Ownable {
             filteredWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
                 filteredWETHPutOptionOTokenAddressList[i],
                 IOpynOTokenV1Instance.expiry(),
-                IOpynOTokenV1Instance.strike(),
+                IOpynOTokenV1Instance.strikePrice(),
                 _getOpynV1Premium(
                     IOpynOTokenV1Instance.expiry(),
-                    IOpynOTokenV1Instance.strike(),
+                    IOpynOTokenV1Instance.strikePrice(),
                     USDCTokenAddress
                 )
             );
