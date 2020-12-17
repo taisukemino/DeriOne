@@ -91,7 +91,6 @@ contract DeriOne is Ownable {
         address _hegicETHPoolV888Address,
         address _opynExchangeV1Address,
         address _opynOptionsFactoryV1Address,
-        address _opynOTokenV1Address,
         address _uniswapFactoryV1Address
     ) public {
         instantiateETHPriceOracle(_ETHPriceOracleAddress);
@@ -99,7 +98,6 @@ contract DeriOne is Ownable {
         instantiateHegicETHPoolV888(_hegicETHPoolV888Address);
         instantiateOpynExchangeV1(_opynExchangeV1Address);
         instantiateOpynOptionsFactoryV1(_opynOptionsFactoryV1Address);
-        instantiateOpynOTokenV1(_opynOTokenV1Address);
         instantiateUniswapFactoryV1(_uniswapFactoryV1Address);
     }
 
@@ -158,16 +156,6 @@ contract DeriOne is Ownable {
         );
     }
 
-    /// @notice instantiate the OpynOTokenV1 contract
-    /// @param _opynOTokenV1Address OpynOTokenV1Address
-    function instantiateOpynOTokenV1(address _opynOTokenV1Address)
-        public
-        onlyOwner
-    {
-        IOpynOTokenV1Instance = IOpynOTokenV1(_opynOTokenV1Address);
-        emit NewOpynOTokenV1AddressRegistered(_opynOTokenV1Address);
-    }
-
     /// @notice instantiate the UniswapFactoryV1 contract
     /// @param _uniswapFactoryV1Address UniswapFactoryV1Address
     function instantiateUniswapFactoryV1(address _uniswapFactoryV1Address)
@@ -176,6 +164,13 @@ contract DeriOne is Ownable {
     {
         IUniswapFactoryV1Instance = IUniswapFactoryV1(_uniswapFactoryV1Address);
         emit NewUniswapFactoryV1AddressRegistered(_uniswapFactoryV1Address);
+    }
+
+    /// @notice instantiate the OpynOTokenV1 contract
+    /// @param _opynOTokenV1Address OpynOTokenV1Address
+    function instantiateOpynOTokenV1(address _opynOTokenV1Address) private {
+        IOpynOTokenV1Instance = IOpynOTokenV1(_opynOTokenV1Address);
+        emit NewOpynOTokenV1AddressRegistered(_opynOTokenV1Address);
     }
 
     /// @notice get the implied volatility
