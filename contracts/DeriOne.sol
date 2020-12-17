@@ -237,6 +237,7 @@ contract DeriOne is Ownable {
     /// @dev in the Opyn V1, there are only put options and thus no need to filter a type
     /// @dev we don't use ETH put options because the Opyn V1 has vulnerability there
     function _getWETHPutOptionsOTokenAddressList() private {
+        _getOTokenAddressList();
         for (uint256 i = 0; i < oTokenAddressList.length; i++) {
             IOpynOTokenV1Instance = setOpynOTokenV1Address(
                 oTokenAddressList[i]
