@@ -178,14 +178,14 @@ contract DeriOne is Ownable {
     }
 
     /// @notice get the implied volatility
-    function _getHegicV888ImpliedVolatility() private {
+    function _getHegicV888ImpliedVolatility() private returns (uint256) {
         uint256 impliedVolatilityRate = IHegicETHOptionV888Instance
             .impliedVolRate();
         return impliedVolatilityRate;
     }
 
     /// @notice get the underlying asset price
-    function _getHegicV888ETHPrice() private {
+    function _getHegicV888ETHPrice() private returns (uint256) {
         (, int256 latestPrice, , , ) = IETHPriceOracleInstance
             .latestRoundData();
         uint256 ETHPrice = uint256(latestPrice);
@@ -283,7 +283,7 @@ contract DeriOne is Ownable {
         uint256 expiry,
         uint256 strike,
         uint256 oTokensToBuy
-    ) private {
+    ) private returns (uint256) {
         address oTokenAddress;
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             if (
@@ -424,6 +424,7 @@ contract DeriOne is Ownable {
     /// @param optionSizeInETH the size of an option to buy in ETH
     function _hasEnoughETHLiquidityInHegicV888(uint256 optionSizeInETH)
         private
+        returns (bool)
     {
         uint256 maxOptionSize = IHegicETHPoolV888Instance.totalBalance().mul(
             0.8
@@ -441,6 +442,7 @@ contract DeriOne is Ownable {
     /// @param optionSizeInETH the size of an option to buy in ETH
     function _hasEnoughOTokenLiquidityInOpynV1(uint256 optionSizeInETH)
         private
+        returns (bool)
     {
         address uniswapExchangeContractAddress = IUniswapFactoryV1Instance
             .getExchange(theCheapestETHPutOption.oTokenAddress);
