@@ -360,7 +360,7 @@ contract DeriOne is Ownable {
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
-                OpynV1,
+                optionType.OpynV1,
                 theCheapestWETHPutOptionInOpynV1.oTokenAddress,
                 address(0),
                 theCheapestWETHPutOptionInOpynV1.expiry,
@@ -373,7 +373,7 @@ contract DeriOne is Ownable {
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
-                HegicV888,
+                optionType.HegicV888,
                 address(0),
                 address(0),
                 theCheapestETHPutOptionInHegicV888.expiry,
@@ -464,7 +464,7 @@ contract DeriOne is Ownable {
     /// @param receiver the account that will receive the oTokens
     function buyTheCheapestETHPutOption(address receiver) public {
         getTheCheapestETHPutOption();
-        if (theCheapestETHPutOption.protocol == HegicV888) {
+        if (theCheapestETHPutOption.protocol == optionType.HegicV888) {
             require(
                 _hasEnoughETHLiquidityInHegicV888(
                     theCheapestETHPutOption.amount
@@ -476,7 +476,7 @@ contract DeriOne is Ownable {
                 theCheapestETHPutOption.amount,
                 theCheapestETHPutOption.strike
             );
-        } else if (theCheapestETHPutOption.protocol == OpynV1) {
+        } else if (theCheapestETHPutOption.protocol == optionType.OpynV1) {
             require(
                 _hasEnoughOTokenLiquidityInOpynV1(
                     theCheapestETHPutOption.amount
