@@ -353,9 +353,11 @@ contract DeriOne is Ownable {
     }
 
     /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
-    function getTheCheapestETHPutOption() internal {
+    function getTheCheapestETHPutOption(uint256 minExpiry, uint256 minStrike)
+        internal
+    {
         _getTheCheapestETHPutOptionInOpynV1();
-        _getTheCheapestETHPutOptionInHegicV888();
+        _getTheCheapestETHPutOptionInHegicV888(minExpiry, minStrike);
         if (
             theCheapestETHPutOptionInHegicV888.premium <
             theCheapestWETHPutOptionInOpynV1.premium
