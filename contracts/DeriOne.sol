@@ -469,8 +469,8 @@ contract DeriOne is Ownable {
 
     /// @notice buy the cheapest ETH put option
     /// @param receiver the account that will receive the oTokens
-    function buyTheCheapestETHPutOption(address receiver) public {
-        getTheCheapestETHPutOption();
+    function buyTheCheapestETHPutOption(uint256 minExpiry, uint256 minStrike, address receiver) public {
+        getTheCheapestETHPutOption(minExpiry, minStrike);
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {
             require(
                 _hasEnoughETHLiquidityInHegicV888(
