@@ -319,7 +319,8 @@ contract DeriOne is Ownable {
                 IOpynOTokenV1Instance.strike(),
                 _getOpynV1Premium(
                     IOpynOTokenV1Instance.expiry(),
-                    IOpynOTokenV1Instance.strike()
+                    IOpynOTokenV1Instance.strike(),
+                    USDCTokenAddress
                 )
             );
         }
