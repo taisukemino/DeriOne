@@ -31,8 +31,9 @@ contract DeriOne is Ownable {
     address[] private WETHPutOptionOTokenAddressList;
     address[] private filteredWETHPutOptionOTokenAddressList;
 
-    enum OptionType {Invalid, Put, Call}
-    OptionType private optionType;
+    enum OptionType {Invalid, Call, Put}
+    OptionType constant callOptionType = OptionType.Call;
+    OptionType constant putOptionType = OptionType.Put;
 
     struct TheCheapestETHPutOptionInHegicV888 {
         uint256 expiry;
@@ -401,7 +402,7 @@ contract DeriOne is Ownable {
             expiry,
             amount,
             strike,
-            optionType.Put
+            putOptionType
         );
     }
 
