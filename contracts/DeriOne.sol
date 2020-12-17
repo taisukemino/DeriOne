@@ -460,7 +460,7 @@ contract DeriOne is Ownable {
         uint256 optionSizeInOToken = optionSizeInETH.mul(
             IOpynOTokenV1Instance.oTokenExchangeRate()
         );
-        if (0 < optionSizeInOToken < oTokenLiquidity) {
+        if (optionSizeInOToken < oTokenLiquidity) {
             return true;
         } else {
             return false;
