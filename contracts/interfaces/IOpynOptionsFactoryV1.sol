@@ -36,7 +36,7 @@ interface IOpynOptionsFactoryV1 {
 
     function deleteAsset(string memory _asset) external;
 
-    function optionsContracts(uint256) external view returns (address);
+    function optionsContracts() external view returns (address);
 
     function transferOwnership(address newOwner) external;
 }
