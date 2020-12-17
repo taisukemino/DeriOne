@@ -149,7 +149,7 @@ contract DeriOne is Ownable {
     function setOpynOptionsFactoryV1Address(
         address _opynOptionsFactoryV1Address
     ) public onlyOwner {
-        IOpynOptionsFactoryV1Instance = IOpynExchangeV1(
+        IOpynOptionsFactoryV1Instance = IOpynOptionsFactoryV1(
             _opynOptionsFactoryV1Address
         );
         emit NewOpynOptionsFactoryV1AddressRegistered(
