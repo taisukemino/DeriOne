@@ -342,7 +342,7 @@ contract DeriOne is Ownable {
         return premiumToPayInETH;
     }
 
-    function _constructFilteredWETHPutOptionOTokenListV1(uint256 optionSize)
+    function _constructFilteredWETHPutOptionOTokenListV1(uint256 optionSizeInETH)
         private
     {
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
@@ -353,7 +353,7 @@ contract DeriOne is Ownable {
                 _getOpynV1Premium(
                     filteredWETHPutOptionOTokenV1InstanceList[i].expiry(),
                     filteredWETHPutOptionOTokenV1InstanceList[i].strikePrice(),
-                    optionSize
+                    optionSizeInETH
                 )
             );
         }
@@ -392,7 +392,7 @@ contract DeriOne is Ownable {
         uint256 maxExpiry,
         uint256 minStrike,
         uint256 maxStrike,
-        uint256 optionSize
+        uint256 optionSizeInETH
     ) private {
         require(
             _hasEnoughOTokenLiquidityInOpynV1(theCheapestETHPutOption.amount) ==
@@ -406,7 +406,7 @@ contract DeriOne is Ownable {
             minStrike,
             maxStrike
         );
-        _constructFilteredWETHPutOptionOTokenListV1(optionSize);
+        _constructFilteredWETHPutOptionOTokenListV1(optionSizeInETH);
         uint256 minimumPremium = filteredWETHPutOptionOTokenListV1[0].premium;
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             if (
@@ -438,7 +438,7 @@ contract DeriOne is Ownable {
         uint256 maxExpiry,
         uint256 minStrike,
         uint256 maxStrike,
-        uint256 optionSize
+        uint256 optionSizeInETH
     ) internal {
         _getTheCheapestETHPutOptionInHegicV888(minExpiry, minStrike);
         _getTheCheapestETHPutOptionInOpynV1(
@@ -446,7 +446,7 @@ contract DeriOne is Ownable {
             maxExpiry,
             minStrike,
             maxStrike,
-            optionSize
+            optionSizeInETH
         );
         if (
             theCheapestETHPutOptionInHegicV888.premium <
