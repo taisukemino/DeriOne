@@ -287,12 +287,16 @@ contract DeriOne is Ownable {
     function _filterWETHPutOptionsOTokenAddresses(
         uint256 minExpiry,
         uint256 maxExpiry,
-        uint256 strike
+        uint256 minStrike,
+        uint256 maxStrike
     ) private {
         _getWETHPutOptionsOTokenAddressList();
         for (uint256 i = 0; i < WETHPutOptionOTokenV1InstanceList.length; i++) {
             if (
-                WETHPutOptionOTokenV1InstanceList[i].strikePrice() == strike &&
+                minStrike <
+                WETHPutOptionOTokenV1InstanceList[i].strikePrice() &&
+                WETHPutOptionOTokenV1InstanceList[i].strikePrice() <
+                maxStrike &&
                 minExpiry < WETHPutOptionOTokenV1InstanceList[i].expiry() &&
                 WETHPutOptionOTokenV1InstanceList[i].expiry() < maxExpiry
             ) {
@@ -341,10 +345,16 @@ contract DeriOne is Ownable {
     function _constructFilteredWETHPutOptionOTokenListV1(
         uint256 minExpiry,
         uint256 maxExpiry,
-        uint256 strike,
+        uint256 minStrike,
+        uint256 maxStrike,
         uint256 optionSize
     ) private {
-        _filterWETHPutOptionsOTokenAddresses(minExpiry, maxExpiry, strike);
+        _filterWETHPutOptionsOTokenAddresses(
+            minExpiry,
+            maxExpiry,
+            minStrike,
+            maxStrike
+        );
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             filteredWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
                 filteredWETHPutOptionOTokenListV1[i].oTokenAddress,
@@ -390,7 +400,8 @@ contract DeriOne is Ownable {
     function _getTheCheapestETHPutOptionInOpynV1(
         uint256 minExpiry,
         uint256 maxExpiry,
-        uint256 strike,
+        uint256 minStrike,
+        uint256 maxStrike,
         uint256 optionSize
     ) private {
         require(
@@ -401,7 +412,8 @@ contract DeriOne is Ownable {
         _constructFilteredWETHPutOptionOTokenListV1(
             minExpiry,
             maxExpiry,
-            strike,
+            minStrike,
+            maxStrike,
             optionSize
         );
         uint256 minimumPremium = filteredWETHPutOptionOTokenListV1[0].premium;
@@ -432,15 +444,17 @@ contract DeriOne is Ownable {
     /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
     function getTheCheapestETHPutOption(
         uint256 minExpiry,
+        uint256 maxExpiry,
         uint256 minStrike,
-        uint256 strike,
+        uint256 maxStrike,
         uint256 optionSize
     ) internal {
         _getTheCheapestETHPutOptionInHegicV888(minExpiry, minStrike);
         _getTheCheapestETHPutOptionInOpynV1(
             minExpiry,
+            maxExpiry,
             minStrike,
-            strike,
+            maxStrike,
             optionSize
         );
         if (
@@ -512,12 +526,19 @@ contract DeriOne is Ownable {
     /// @param receiver the account that will receive the oTokens
     function buyTheCheapestETHPutOption(
         uint256 minExpiry,
+        uint256 maxExpiry,
         uint256 minStrike,
-        uint256 strike,
+        uint256 maxStrike,
         uint256 optionSize,
         address receiver
     ) public {
-        getTheCheapestETHPutOption(minExpiry, minStrike, strike, optionSize);
+        getTheCheapestETHPutOption(
+            minExpiry,
+            maxExpiry,
+            minStrike,
+            minStrike,
+            optionSize
+        );
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {
             _buyETHPutOptionInHegicV888(
                 theCheapestETHPutOption.expiry,
