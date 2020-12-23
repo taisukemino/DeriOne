@@ -290,7 +290,6 @@ contract DeriOne is Ownable {
         uint256 minStrike,
         uint256 maxStrike
     ) private {
-        _getWETHPutOptionsOTokenAddressList();
         for (uint256 i = 0; i < WETHPutOptionOTokenV1InstanceList.length; i++) {
             if (
                 minStrike <
@@ -342,19 +341,9 @@ contract DeriOne is Ownable {
         return premiumToPayInETH;
     }
 
-    function _constructFilteredWETHPutOptionOTokenListV1(
-        uint256 minExpiry,
-        uint256 maxExpiry,
-        uint256 minStrike,
-        uint256 maxStrike,
-        uint256 optionSize
-    ) private {
-        _filterWETHPutOptionsOTokenAddresses(
-            minExpiry,
-            maxExpiry,
-            minStrike,
-            maxStrike
-        );
+    function _constructFilteredWETHPutOptionOTokenListV1(uint256 optionSize)
+        private
+    {
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             filteredWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
                 filteredWETHPutOptionOTokenListV1[i].oTokenAddress,
@@ -409,13 +398,14 @@ contract DeriOne is Ownable {
                 true,
             "your size is too big for this oToken liquidity in the Opyn V1"
         );
-        _constructFilteredWETHPutOptionOTokenListV1(
+        _getWETHPutOptionsOTokenAddressList();
+        _filterWETHPutOptionsOTokenAddresses(
             minExpiry,
             maxExpiry,
             minStrike,
-            maxStrike,
-            optionSize
+            maxStrike
         );
+        _constructFilteredWETHPutOptionOTokenListV1(optionSize);
         uint256 minimumPremium = filteredWETHPutOptionOTokenListV1[0].premium;
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             if (
