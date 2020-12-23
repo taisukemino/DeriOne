@@ -244,7 +244,7 @@ contract DeriOne is Ownable {
         require(
             _hasEnoughETHLiquidityInHegicV888(theCheapestETHPutOption.amount) ==
                 true,
-            "your size is too big"
+            "your size is too big for liquidity in the Hegic V888"
         );
         uint256 impliedVolatility = _getHegicV888ImpliedVolatility();
         uint256 ETHPrice = _getHegicV888ETHPrice();
@@ -407,7 +407,7 @@ contract DeriOne is Ownable {
         require(
             _hasEnoughOTokenLiquidityInOpynV1(theCheapestETHPutOption.amount) ==
                 true,
-            "your size is too big"
+            "your size is too big for this oToken liquidity in the Opyn V1"
         );
         _constructFilteredWETHPutOptionOTokenListV1(
             minExpiry,
