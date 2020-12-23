@@ -283,7 +283,8 @@ contract DeriOne is Ownable {
     /// @notice get WETH Put Options that meet expiry and strike conditions
     /// @param minExpiry minimum expiration date
     /// @param maxExpiry maximum expiration date
-    /// @param strike strike price
+    /// @param minStrike minimum strike price
+    /// @param maxStrike maximum strike price
     function _filterWETHPutOptionsOTokenAddresses(
         uint256 minExpiry,
         uint256 maxExpiry,
