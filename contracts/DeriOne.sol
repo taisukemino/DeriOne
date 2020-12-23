@@ -34,8 +34,10 @@ contract DeriOne is Ownable {
 
     address[] private oTokenAddressList;
 
-    IHegicETHOptionV888.OptionType constant putOptionType = IHegicETHOptionV888.OptionType.Put;
-    IHegicETHOptionV888.OptionType constant callOptionType = IHegicETHOptionV888.OptionType.Call;
+    IHegicETHOptionV888.OptionType constant putOptionType =
+        IHegicETHOptionV888.OptionType.Put;
+    IHegicETHOptionV888.OptionType constant callOptionType =
+        IHegicETHOptionV888.OptionType.Call;
 
     struct TheCheapestETHPutOptionInHegicV888 {
         uint256 expiry;
@@ -214,6 +216,23 @@ contract DeriOne is Ownable {
         }
     }
 
+    /// @notice check if there is enough liquidity in Hegic pool
+    /// @param optionSizeInETH the size of an option to buy in ETH
+    function _hasEnoughETHLiquidityInHegicV888(uint256 optionSizeInETH)
+        private
+        returns (bool)
+    {
+        uint256 maxOptionSize =
+            HegicETHPoolV888Instance.totalBalance().mul(8).div(10) -
+                (HegicETHPoolV888Instance.totalBalance() -
+                    HegicETHPoolV888Instance.lockedAmount());
+        if (maxOptionSize > optionSizeInETH) {
+            return true;
+        } else if (maxOptionSize <= optionSizeInETH) {
+            return false;
+        }
+    }
+
     /// @notice calculate the premium and get the cheapest ETH put option in Hegic v888
     /// @param minExpiry minimum expiration date
     /// @param minStrike minimum strike price
@@ -222,6 +241,11 @@ contract DeriOne is Ownable {
         uint256 minExpiry,
         uint256 minStrike
     ) private {
+        require(
+            _hasEnoughETHLiquidityInHegicV888(theCheapestETHPutOption.amount) ==
+                true,
+            "your size is too big"
+        );
         uint256 impliedVolatility = _getHegicV888ImpliedVolatility();
         uint256 ETHPrice = _getHegicV888ETHPrice();
         uint256 minimumPremiumToPayInETH =
@@ -335,12 +359,45 @@ contract DeriOne is Ownable {
         }
     }
 
+    /// @notice check if there is enough liquidity in Opyn V1 pool
+    /// @param optionSizeInETH the size of an option to buy in ETH
+    /// @dev write a function for power operations. the SafeMath library doesn't support this yet.
+    function _hasEnoughOTokenLiquidityInOpynV1(uint256 optionSizeInETH)
+        private
+        returns (bool)
+    {
+        address uniswapExchangeContractAddress =
+            UniswapFactoryV1Instance.getExchange(
+                theCheapestETHPutOption.oTokenAddress
+            );
+        IOpynOTokenV1 theCheapestOTokenV1Instance =
+            IOpynOTokenV1(theCheapestETHPutOption.oTokenAddress);
+        uint256 oTokenLiquidity =
+            theCheapestOTokenV1Instance.balanceOf(
+                uniswapExchangeContractAddress
+            );
+        (uint256 value, int32 exponent) =
+            theCheapestOTokenV1Instance.oTokenExchangeRate();
+        uint256 optionSizeInOToken =
+            optionSizeInETH.mul(value.mul(10**exponent));
+        if (optionSizeInOToken < oTokenLiquidity) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function _getTheCheapestETHPutOptionInOpynV1(
         uint256 minExpiry,
         uint256 maxExpiry,
         uint256 strike,
         uint256 optionSize
     ) private {
+        require(
+            _hasEnoughOTokenLiquidityInOpynV1(theCheapestETHPutOption.amount) ==
+                true,
+            "your size is too big"
+        );
         _constructFilteredWETHPutOptionOTokenListV1(
             minExpiry,
             maxExpiry,
@@ -379,13 +436,13 @@ contract DeriOne is Ownable {
         uint256 strike,
         uint256 optionSize
     ) internal {
+        _getTheCheapestETHPutOptionInHegicV888(minExpiry, minStrike);
         _getTheCheapestETHPutOptionInOpynV1(
             minExpiry,
             minStrike,
             strike,
             optionSize
         );
-        _getTheCheapestETHPutOptionInHegicV888(minExpiry, minStrike);
         if (
             theCheapestETHPutOptionInHegicV888.premium <
             theCheapestWETHPutOptionInOpynV1.premium
@@ -451,51 +508,6 @@ contract DeriOne is Ownable {
         );
     }
 
-    /// @notice check if there is enough liquidity in Hegic pool
-    /// @param optionSizeInETH the size of an option to buy in ETH
-    function _hasEnoughETHLiquidityInHegicV888(uint256 optionSizeInETH)
-        private
-        returns (bool)
-    {
-        uint256 maxOptionSize =
-            HegicETHPoolV888Instance.totalBalance().mul(8).div(10) -
-                (HegicETHPoolV888Instance.totalBalance() -
-                    HegicETHPoolV888Instance.lockedAmount());
-        if (maxOptionSize > optionSizeInETH) {
-            return true;
-        } else if (maxOptionSize <= optionSizeInETH) {
-            return false;
-        }
-    }
-
-    /// @notice check if there is enough liquidity in Opyn V1 pool
-    /// @param optionSizeInETH the size of an option to buy in ETH
-    /// @dev write a function for power operations. the SafeMath library doesn't support this yet.
-    function _hasEnoughOTokenLiquidityInOpynV1(uint256 optionSizeInETH)
-        private
-        returns (bool)
-    {
-        address uniswapExchangeContractAddress =
-            UniswapFactoryV1Instance.getExchange(
-                theCheapestETHPutOption.oTokenAddress
-            );
-        IOpynOTokenV1 theCheapestOTokenV1Instance =
-            IOpynOTokenV1(theCheapestETHPutOption.oTokenAddress);
-        uint256 oTokenLiquidity =
-            theCheapestOTokenV1Instance.balanceOf(
-                uniswapExchangeContractAddress
-            );
-        (uint256 value, int32 exponent) =
-            theCheapestOTokenV1Instance.oTokenExchangeRate();
-        uint256 optionSizeInOToken =
-            optionSizeInETH.mul(value.mul(10**exponent));
-        if (optionSizeInOToken < oTokenLiquidity) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /// @notice buy the cheapest ETH put option
     /// @param receiver the account that will receive the oTokens
     function buyTheCheapestETHPutOption(
@@ -507,24 +519,12 @@ contract DeriOne is Ownable {
     ) public {
         getTheCheapestETHPutOption(minExpiry, minStrike, strike, optionSize);
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {
-            require(
-                _hasEnoughETHLiquidityInHegicV888(
-                    theCheapestETHPutOption.amount
-                ) == true,
-                "your size is too big"
-            );
             _buyETHPutOptionInHegicV888(
                 theCheapestETHPutOption.expiry,
                 theCheapestETHPutOption.amount,
                 theCheapestETHPutOption.strike
             );
         } else if (theCheapestETHPutOption.protocol == Protocol.OpynV1) {
-            require(
-                _hasEnoughOTokenLiquidityInOpynV1(
-                    theCheapestETHPutOption.amount
-                ) == true,
-                "your size is too big"
-            );
             _buyETHPutOptionInOpynV1(
                 receiver,
                 theCheapestETHPutOption.oTokenAddress,
