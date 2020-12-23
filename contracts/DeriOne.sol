@@ -426,11 +426,10 @@ contract DeriOne is Ownable {
         private
         returns (bool)
     {
-        uint256 maxOptionSize = IHegicETHPoolV888Instance.totalBalance().mul(
-            0.8
-        ) -
-            (IHegicETHPoolV888Instance.totalBalance() -
-                IHegicETHPoolV888Instance.lockedAmount());
+        uint256 maxOptionSize =
+            HegicETHPoolV888Instance.totalBalance().mul(8).div(10) -
+                (HegicETHPoolV888Instance.totalBalance() -
+                    HegicETHPoolV888Instance.lockedAmount());
         if (maxOptionSize > optionSizeInETH) {
             return true;
         } else if (maxOptionSize <= optionSizeInETH) {
