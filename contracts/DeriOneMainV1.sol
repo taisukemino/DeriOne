@@ -15,7 +15,7 @@ import "./libraries/Math.sol";
 /// @title A contract for getting the cheapest options price
 /// @notice For now, this contract gets the cheapest ETH/WETH put options price from Opyn and Hegic
 /// @dev can i put a contract instance in struct?
-contract DeriOneV1 is Ownable {
+contract DeriOneMainV1 is Ownable {
     using SafeMath for uint256;
 
     IETHPriceOracle private ETHPriceOracleInstance;
@@ -573,3 +573,5 @@ contract DeriOneV1 is Ownable {
 // refer to uniswap factory contract to manage registry? 
 
 // perhaps hasLiquidity can be a modifier?
+
+// import vs. inheritance
