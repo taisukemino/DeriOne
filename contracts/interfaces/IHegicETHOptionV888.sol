@@ -1,11 +1,13 @@
 pragma solidity ^0.6.0;
 
 interface IHegicETHOptionV888 {
+    enum OptionType {Invalid, Put, Call}
+
     function create(
         uint256 period,
         uint256 amount,
         uint256 strike,
-        uint8 optionType
+        OptionType optionType
     ) external returns (uint256 optionID);
 
     function exercise(uint256 optionID) external;
