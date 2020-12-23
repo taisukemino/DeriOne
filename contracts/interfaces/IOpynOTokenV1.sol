@@ -67,9 +67,10 @@ interface IOpynOTokenV1 {
         address receiver
     ) external;
 
-    function exercise(uint256 oTokensToExercise, address[] memory vaultsToExerciseFrom)
-        external
-        payable;
+    function exercise(
+        uint256 oTokensToExercise,
+        address[] memory vaultsToExerciseFrom
+    ) external payable;
 
     function addERC20CollateralOption(
         uint256 amtToCreate,
