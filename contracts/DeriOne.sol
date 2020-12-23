@@ -519,7 +519,7 @@ contract DeriOne is Ownable {
         uint256 maxExpiry,
         uint256 minStrike,
         uint256 maxStrike,
-        uint256 optionSize,
+        uint256 optionSizeInETH,
         address receiver
     ) public {
         getTheCheapestETHPutOption(
@@ -527,7 +527,7 @@ contract DeriOne is Ownable {
             maxExpiry,
             minStrike,
             minStrike,
-            optionSize
+            optionSizeInETH
         );
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {
             _buyETHPutOptionInHegicV888(
