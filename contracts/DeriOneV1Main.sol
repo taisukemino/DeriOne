@@ -50,7 +50,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         uint256 minStrike,
         uint256 maxStrike,
         uint256 optionSizeInETH
-    ) internal {
+    ) public {
         getTheCheapestETHPutOptionInHegicV888(
             minExpiry,
             minStrike,
