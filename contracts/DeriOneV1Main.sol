@@ -7,7 +7,7 @@ import "./DeriOneV1OpynV1.sol";
 /// @title A contract for getting the cheapest options price
 /// @notice For now, this contract gets the cheapest ETH/WETH put options price from Opyn and Hegic
 /// @dev can i put a contract instance in struct?
-contract DeriOneV1Main {
+contract DeriOneV1Main is DeriOneV1HegicV888 {
     enum Protocol {OpynV1, HegicV888}
     struct TheCheapestETHPutOption {
         Protocol protocol;
@@ -22,6 +22,19 @@ contract DeriOneV1Main {
 
     event NewOptionBought();
 
+    constructor(
+        address _ETHPriceOracleAddress,
+        address _hegicETHOptionV888Address,
+        address _hegicETHPoolV888Address
+    )
+        public
+        DeriOneV1HegicV888(
+            _ETHPriceOracleAddress,
+            _hegicETHOptionV888Address,
+            _hegicETHPoolV888Address
+        )
+    {}
+
     /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
     function getTheCheapestETHPutOption(
         uint256 minExpiry,
@@ -30,7 +43,7 @@ contract DeriOneV1Main {
         uint256 maxStrike,
         uint256 optionSizeInETH
     ) internal {
-        DeriOneV1HegicV888.getTheCheapestETHPutOptionInHegicV888(
+        getTheCheapestETHPutOptionInHegicV888(
             minExpiry,
             minStrike,
             optionSizeInETH
@@ -43,7 +56,7 @@ contract DeriOneV1Main {
             optionSizeInETH
         );
         if (
-            DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.premium <
+            theCheapestETHPutOptionInHegicV888.premium <
             DeriOneV1OpynV1.theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
@@ -56,16 +69,16 @@ contract DeriOneV1Main {
                 0
             );
         } else if (
-            DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.premium >
+            theCheapestETHPutOptionInHegicV888.premium >
             DeriOneV1OpynV1.theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
                 Protocol.HegicV888,
                 address(0),
                 address(0),
-                DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.expiry,
-                DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.strike,
-                DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.premium,
+                theCheapestETHPutOptionInHegicV888.expiry,
+                theCheapestETHPutOptionInHegicV888.strike,
+                theCheapestETHPutOptionInHegicV888.premium,
                 0
             );
         } else {}
@@ -87,7 +100,7 @@ contract DeriOneV1Main {
             optionSizeInETH
         );
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {
-            DeriOneV1HegicV888.buyETHPutOptionInHegicV888(
+            buyETHPutOptionInHegicV888(
                 theCheapestETHPutOption.expiry,
                 theCheapestETHPutOption.optionSizeInETH,
                 theCheapestETHPutOption.strike
@@ -150,3 +163,9 @@ contract DeriOneV1Main {
 // import vs. inheritance
 
 // rename to derionev1main and etc
+
+// how to call another contract in a different file
+
+// internal has to be inheritance?
+
+// inheritance contract, abstract contract
