@@ -7,7 +7,7 @@ import "./interfaces/IHegicETHOptionV888.sol";
 import "./interfaces/IHegicETHPoolV888.sol";
 import "./libraries/Math.sol";
 
-contract DeriOneHegicV888 is Ownable {
+contract DeriOneV1HegicV888 is Ownable {
     using SafeMath for uint256;
 
     IETHPriceOracle private ETHPriceOracleInstance;

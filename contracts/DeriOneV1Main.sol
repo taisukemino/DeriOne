@@ -1,7 +1,7 @@
 pragma solidity ^0.6.0;
 
-import "./DeriOneHegicV888.sol";
-import "./DeriOneOpynV1.sol";
+import "./DeriOneV1HegicV888.sol";
+import "./DeriOneV1OpynV1.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./interfaces/IOpynExchangeV1.sol";
@@ -13,7 +13,7 @@ import "./interfaces/IUniswapFactoryV1.sol";
 /// @title A contract for getting the cheapest options price
 /// @notice For now, this contract gets the cheapest ETH/WETH put options price from Opyn and Hegic
 /// @dev can i put a contract instance in struct?
-contract DeriOneMainV1 is Ownable {
+contract DeriOneV1Main is Ownable {
     using SafeMath for uint256;
 
     IOpynExchangeV1 private OpynExchangeV1Instance;
@@ -308,7 +308,7 @@ contract DeriOneMainV1 is Ownable {
         uint256 maxStrike,
         uint256 optionSizeInETH
     ) internal {
-        DeriOneHegicV888.getTheCheapestETHPutOptionInHegicV888(minExpiry, minStrike, optionSizeInETH);
+        DeriOneV1HegicV888.getTheCheapestETHPutOptionInHegicV888(minExpiry, minStrike, optionSizeInETH);
         _getTheCheapestETHPutOptionInOpynV1(
             minExpiry,
             maxExpiry,
@@ -317,7 +317,7 @@ contract DeriOneMainV1 is Ownable {
             optionSizeInETH
         );
         if (
-            DeriOneHegicV888.theCheapestETHPutOptionInHegicV888.premium <
+            DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.premium <
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
@@ -330,16 +330,16 @@ contract DeriOneMainV1 is Ownable {
                 0
             );
         } else if (
-            DeriOneHegicV888.theCheapestETHPutOptionInHegicV888.premium >
+            DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.premium >
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
                 Protocol.HegicV888,
                 address(0),
                 address(0),
-                DeriOneHegicV888.theCheapestETHPutOptionInHegicV888.expiry,
-                DeriOneHegicV888.theCheapestETHPutOptionInHegicV888.strike,
-                DeriOneHegicV888.theCheapestETHPutOptionInHegicV888.premium,
+                DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.expiry,
+                DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.strike,
+                DeriOneV1HegicV888.theCheapestETHPutOptionInHegicV888.premium,
                 0
             );
         } else {}
@@ -380,7 +380,7 @@ contract DeriOneMainV1 is Ownable {
             optionSizeInETH
         );
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {
-            DeriOneHegicV888.buyETHPutOptionInHegicV888(
+            DeriOneV1HegicV888.buyETHPutOptionInHegicV888(
                 theCheapestETHPutOption.expiry,
                 theCheapestETHPutOption.optionSizeInETH,
                 theCheapestETHPutOption.strike
