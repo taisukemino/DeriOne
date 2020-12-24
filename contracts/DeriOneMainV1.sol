@@ -1,6 +1,7 @@
 pragma solidity ^0.6.0;
 
 import "./DeriOneHegicV888.sol";
+import "./DeriOneOpynV1.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./interfaces/IOpynExchangeV1.sol";
