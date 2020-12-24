@@ -244,9 +244,7 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 optionSizeInETH
     ) internal {
         require(
-            _hasEnoughOTokenLiquidityInOpynV1(
-                optionSizeInETH
-            ) == true,
+            _hasEnoughOTokenLiquidityInOpynV1(optionSizeInETH) == true,
             "your size is too big for this oToken liquidity in the Opyn V1"
         );
         _getWETHPutOptionsOTokenAddressList();
