@@ -162,18 +162,8 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 //         int32 exponent;
 //     }
 
-// split this contract file into some files
-
 // refer to uniswap factory contract to manage registry?
 
 // perhaps hasLiquidity can be a modifier?
-
-// import vs. inheritance
-
-// rename to derionev1main and etc
-
-// how to call another contract in a different file
-
-// internal has to be inheritance?
 
 // inheritance contract, abstract contract
