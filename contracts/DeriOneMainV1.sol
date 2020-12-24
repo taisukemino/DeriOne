@@ -72,7 +72,7 @@ contract DeriOneMainV1 is Ownable {
         uint256 expiry;
         uint256 strike;
         uint256 premium;
-        uint256 amount;
+        uint256 optionSizeInETH;
     }
     TheCheapestETHPutOption theCheapestETHPutOption;
 
@@ -380,7 +380,7 @@ contract DeriOneMainV1 is Ownable {
         uint256 optionSizeInETH
     ) private {
         require(
-            _hasEnoughOTokenLiquidityInOpynV1(theCheapestETHPutOption.amount) ==
+            _hasEnoughOTokenLiquidityInOpynV1(theCheapestETHPutOption.optionSizeInETH) ==
                 true,
             "your size is too big for this oToken liquidity in the Opyn V1"
         );
@@ -524,7 +524,7 @@ contract DeriOneMainV1 is Ownable {
                 receiver,
                 theCheapestETHPutOption.oTokenAddress,
                 theCheapestETHPutOption.paymentTokenAddress,
-                theCheapestETHPutOption.amount
+                theCheapestETHPutOption.optionSizeInETH
             );
         } else {
             // there is no options
