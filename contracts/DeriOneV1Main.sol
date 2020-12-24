@@ -7,7 +7,7 @@ import "./DeriOneV1OpynV1.sol";
 /// @title A contract for getting the cheapest options price
 /// @notice For now, this contract gets the cheapest ETH/WETH put options price from Opyn and Hegic
 /// @dev can i put a contract instance in struct?
-contract DeriOneV1Main is DeriOneV1HegicV888 {
+contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     enum Protocol {OpynV1, HegicV888}
     struct TheCheapestETHPutOption {
         Protocol protocol;
@@ -25,13 +25,21 @@ contract DeriOneV1Main is DeriOneV1HegicV888 {
     constructor(
         address _ETHPriceOracleAddress,
         address _hegicETHOptionV888Address,
-        address _hegicETHPoolV888Address
+        address _hegicETHPoolV888Address,
+        address _opynExchangeV1Address,
+        address _opynOptionsFactoryV1Address,
+        address _uniswapFactoryV1Address
     )
         public
         DeriOneV1HegicV888(
             _ETHPriceOracleAddress,
             _hegicETHOptionV888Address,
             _hegicETHPoolV888Address
+        )
+        DeriOneV1OpynV1(            
+            _opynExchangeV1Address,
+            _opynOptionsFactoryV1Address,
+            _uniswapFactoryV1Address
         )
     {}
 
@@ -48,7 +56,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888 {
             minStrike,
             optionSizeInETH
         );
-        DeriOneV1OpynV1.getTheCheapestETHPutOptionInOpynV1(
+        getTheCheapestETHPutOptionInOpynV1(
             minExpiry,
             maxExpiry,
             minStrike,
@@ -57,20 +65,20 @@ contract DeriOneV1Main is DeriOneV1HegicV888 {
         );
         if (
             theCheapestETHPutOptionInHegicV888.premium <
-            DeriOneV1OpynV1.theCheapestWETHPutOptionInOpynV1.premium
+            theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
                 Protocol.OpynV1,
-                DeriOneV1OpynV1.theCheapestWETHPutOptionInOpynV1.oTokenAddress,
+                theCheapestWETHPutOptionInOpynV1.oTokenAddress,
                 address(0),
-                DeriOneV1OpynV1.theCheapestWETHPutOptionInOpynV1.expiry,
-                DeriOneV1OpynV1.theCheapestWETHPutOptionInOpynV1.strike,
-                DeriOneV1OpynV1.theCheapestWETHPutOptionInOpynV1.premium,
+                theCheapestWETHPutOptionInOpynV1.expiry,
+                theCheapestWETHPutOptionInOpynV1.strike,
+                theCheapestWETHPutOptionInOpynV1.premium,
                 0
             );
         } else if (
             theCheapestETHPutOptionInHegicV888.premium >
-            DeriOneV1OpynV1.theCheapestWETHPutOptionInOpynV1.premium
+            theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
                 Protocol.HegicV888,
@@ -106,7 +114,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888 {
                 theCheapestETHPutOption.strike
             );
         } else if (theCheapestETHPutOption.protocol == Protocol.OpynV1) {
-            DeriOneV1OpynV1.buyETHPutOptionInOpynV1(
+            buyETHPutOptionInOpynV1(
                 receiver,
                 theCheapestETHPutOption.oTokenAddress,
                 theCheapestETHPutOption.paymentTokenAddress,
