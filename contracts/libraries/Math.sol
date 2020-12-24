@@ -1,6 +1,10 @@
 pragma solidity ^0.6.0;
 
+import "@openzeppelin/contracts/math/SafeMath.sol";
+
 library Math {
+    using SafeMath for uint256;
+
     /// @notice babylonian method
     /// @param y unsigned integer 256
     /// modified https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/libraries/Math.sol#L11
