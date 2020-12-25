@@ -8,7 +8,7 @@ import "./DeriOneV1OpynV1.sol";
 /// @notice For now, this contract gets the cheapest ETH/WETH put options price from Opyn and Hegic
 /// @dev can i put a contract instance in struct?
 contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
-    enum Protocol {OpynV1, HegicV888}
+    enum Protocol {HegicV888, OpynV1}
     struct TheCheapestETHPutOption {
         Protocol protocol;
         address oTokenAddress;
