@@ -89,8 +89,8 @@ contract DeriOneV1HegicV888 is Ownable {
     }
 
     /// @notice check if there is enough liquidity in Hegic pool
-    /// @param optionSizeInWEI the size of an option to buy in WEI
-    function _hasEnoughETHLiquidityInHegicV888(uint256 optionSizeInWEI)
+    /// @param _optionSizeInWEI the size of an option to buy in WEI
+    function _hasEnoughETHLiquidityInHegicV888(uint256 _optionSizeInWEI)
         private
         returns (bool)
     {
@@ -98,53 +98,53 @@ contract DeriOneV1HegicV888 is Ownable {
             HegicETHPoolV888Instance.totalBalance().mul(8).div(10) -
                 (HegicETHPoolV888Instance.totalBalance() -
                     HegicETHPoolV888Instance.lockedAmount());
-        if (maxOptionSize > optionSizeInWEI) {
+        if (maxOptionSize > _optionSizeInWEI) {
             return true;
-        } else if (maxOptionSize <= optionSizeInWEI) {
+        } else if (maxOptionSize <= _optionSizeInWEI) {
             return false;
         }
     }
 
     /// @notice calculate the premium and get the cheapest ETH put option in Hegic v888
-    /// @param minExpiry minimum expiration date
-    /// @param minStrike minimum strike price
-    /// @param optionSizeInWEI option size in WEI
-    /// @dev does minExpiry and minStrike always give the cheapest premium? why? is this true?
+    /// @param _minExpiry minimum expiration date
+    /// @param _minStrike minimum strike price
+    /// @param _optionSizeInWEI option size in WEI
+    /// @dev does _minExpiry and _minStrike always give the cheapest premium? why? is this true?
     function getTheCheapestETHPutOptionInHegicV888(
-        uint256 minExpiry,
-        uint256 minStrike,
-        uint256 optionSizeInWEI
+        uint256 _minExpiry,
+        uint256 _minStrike,
+        uint256 _optionSizeInWEI
     ) internal {
         require(
-            _hasEnoughETHLiquidityInHegicV888(optionSizeInWEI) == true,
+            _hasEnoughETHLiquidityInHegicV888(_optionSizeInWEI) == true,
             "your size is too big for liquidity in the Hegic V888"
         );
         uint256 impliedVolatility = _getHegicV888ImpliedVolatility();
         uint256 ETHPrice = _getHegicV888ETHPrice();
         uint256 minimumPremiumToPayInWEI =
-            Math.sqrt(minExpiry).mul(impliedVolatility).mul(
-                minStrike.div(ETHPrice)
+            Math.sqrt(_minExpiry).mul(impliedVolatility).mul(
+                _minStrike.div(ETHPrice)
             );
         theCheapestETHPutOptionInHegicV888 = TheCheapestETHPutOptionInHegicV888(
             minimumPremiumToPayInWEI,
-            minExpiry,
-            minStrike
+            _minExpiry,
+            _minStrike
         );
     }
 
     /// @notice creates a new option in Hegic V888
-    /// @param expiry option period in seconds (1 days <= period <= 4 weeks)
-    /// @param amount option amount
-    /// @param strike strike price of the option
+    /// @param _expiry option period in seconds (1 days <= period <= 4 weeks)
+    /// @param _amount option amount
+    /// @param _strike strike price of the option
     function buyETHPutOptionInHegicV888(
-        uint256 expiry,
-        uint256 amount,
-        uint256 strike
+        uint256 _expiry,
+        uint256 _amount,
+        uint256 _strike
     ) internal {
         HegicETHOptionV888Instance.create(
-            expiry,
-            amount,
-            strike,
+            _expiry,
+            _amount,
+            _strike,
             putOptionType
         );
     }

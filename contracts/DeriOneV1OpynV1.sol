@@ -130,24 +130,24 @@ contract DeriOneV1OpynV1 is Ownable {
     }
 
     /// @notice get WETH Put Options that meet expiry and strike conditions
-    /// @param minExpiry minimum expiration date
-    /// @param maxExpiry maximum expiration date
-    /// @param minStrike minimum strike price
-    /// @param maxStrike maximum strike price
+    /// @param _minExpiry minimum expiration date
+    /// @param _maxExpiry maximum expiration date
+    /// @param _minStrike minimum strike price
+    /// @param _maxStrike maximum strike price
     function _filterWETHPutOptionsOTokenAddresses(
-        uint256 minExpiry,
-        uint256 maxExpiry,
-        uint256 minStrike,
-        uint256 maxStrike
+        uint256 _minExpiry,
+        uint256 _maxExpiry,
+        uint256 _minStrike,
+        uint256 _maxStrike
     ) private {
         for (uint256 i = 0; i < WETHPutOptionOTokenV1InstanceList.length; i++) {
             if (
-                minStrike <
+                _minStrike <
                 WETHPutOptionOTokenV1InstanceList[i].strikePrice() &&
                 WETHPutOptionOTokenV1InstanceList[i].strikePrice() <
-                maxStrike &&
-                minExpiry < WETHPutOptionOTokenV1InstanceList[i].expiry() &&
-                WETHPutOptionOTokenV1InstanceList[i].expiry() < maxExpiry
+                _maxStrike &&
+                _minExpiry < WETHPutOptionOTokenV1InstanceList[i].expiry() &&
+                WETHPutOptionOTokenV1InstanceList[i].expiry() < _maxExpiry
             ) {
                 filteredWETHPutOptionOTokenV1InstanceList.push(
                     WETHPutOptionOTokenV1InstanceList[i]
@@ -159,12 +159,13 @@ contract DeriOneV1OpynV1 is Ownable {
     }
 
     /// @notice get the premium in the Opyn V1
-    /// @param expiry expiration date
-    /// @param strike strike price
+    /// @param _expiry expiration date
+    /// @param _strike strike price
+    /// @param _oTokensToBuy the amount of oToken to buy
     function _getOpynV1Premium(
-        uint256 expiry,
-        uint256 strike,
-        uint256 oTokensToBuy
+        uint256 _expiry,
+        uint256 _strike,
+        uint256 _oTokensToBuy
     ) private returns (uint256) {
         address oTokenAddress;
         for (
@@ -174,9 +175,9 @@ contract DeriOneV1OpynV1 is Ownable {
         ) {
             if (
                 filteredWETHPutOptionOTokenV1InstanceList[i].expiry() ==
-                expiry &&
+                _expiry &&
                 filteredWETHPutOptionOTokenV1InstanceList[i].strikePrice() ==
-                strike
+                _strike
             ) {
                 oTokenAddress = filteredWETHPutOptionOTokenListV1[i]
                     .oTokenAddress;
@@ -186,13 +187,13 @@ contract DeriOneV1OpynV1 is Ownable {
             OpynExchangeV1Instance.premiumToPay(
                 oTokenAddress,
                 address(0),
-                oTokensToBuy
+                _oTokensToBuy
             );
         return premiumToPayInWEI;
     }
 
     function _constructFilteredWETHPutOptionOTokenListV1(
-        uint256 optionSizeInWEI
+        uint256 _optionSizeInWEI
     ) private {
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             filteredWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
@@ -209,9 +210,9 @@ contract DeriOneV1OpynV1 is Ownable {
     }
 
     /// @notice check if there is enough liquidity in Opyn V1 pool
-    /// @param optionSizeInWEI the size of an option to buy in WEI
+    /// @param _optionSizeInWEI the size of an option to buy in WEI
     /// @dev write a function for power operations. the SafeMath library doesn't support this yet.
-    function _hasEnoughOTokenLiquidityInOpynV1(uint256 optionSizeInWEI)
+    function _hasEnoughOTokenLiquidityInOpynV1(uint256 _optionSizeInWEI)
         private
         returns (bool)
     {
@@ -237,24 +238,24 @@ contract DeriOneV1OpynV1 is Ownable {
     }
 
     function getTheCheapestETHPutOptionInOpynV1(
-        uint256 minExpiry,
-        uint256 maxExpiry,
-        uint256 minStrike,
-        uint256 maxStrike,
-        uint256 optionSizeInWEI
+        uint256 _minExpiry,
+        uint256 _maxExpiry,
+        uint256 _minStrike,
+        uint256 _maxStrike,
+        uint256 _optionSizeInWEI
     ) internal {
         require(
-            _hasEnoughOTokenLiquidityInOpynV1(optionSizeInWEI) == true,
+            _hasEnoughOTokenLiquidityInOpynV1(_optionSizeInWEI) == true,
             "your size is too big for this oToken liquidity in the Opyn V1"
         );
         _getWETHPutOptionsOTokenAddressList();
         _filterWETHPutOptionsOTokenAddresses(
-            minExpiry,
-            maxExpiry,
-            minStrike,
-            maxStrike
+            _minExpiry,
+            _maxExpiry,
+            _minStrike,
+            _maxStrike
         );
-        _constructFilteredWETHPutOptionOTokenListV1(optionSizeInWEI);
+        _constructFilteredWETHPutOptionOTokenListV1(_optionSizeInWEI);
         uint256 minimumPremium = filteredWETHPutOptionOTokenListV1[0].premium;
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             if (
@@ -281,21 +282,21 @@ contract DeriOneV1OpynV1 is Ownable {
     }
 
     /// @notice buy an ETH put option in Opyn V1
-    /// @param receiver the account that will receive the oTokens
-    /// @param oTokenAddress the address of the oToken that is being bought
-    /// @param paymentTokenAddress the address of the token you are paying for oTokens with
-    /// @param oTokensToBuy the number of oTokens to buy
+    /// @param _receiver the account that will receive the oTokens
+    /// @param _oTokenAddress the address of the oToken that is being bought
+    /// @param _paymentTokenAddress the address of the token you are paying for oTokens with
+    /// @param _oTokensToBuy the number of oTokens to buy
     function buyETHPutOptionInOpynV1(
-        address receiver,
-        address oTokenAddress,
-        address paymentTokenAddress,
-        uint256 oTokensToBuy
+        address _receiver,
+        address _oTokenAddress,
+        address _paymentTokenAddress,
+        uint256 _oTokensToBuy
     ) internal {
         OpynExchangeV1Instance.buyOTokens(
-            receiver,
-            oTokenAddress,
-            paymentTokenAddress,
-            oTokensToBuy
+            _receiver,
+            _oTokenAddress,
+            _paymentTokenAddress,
+            _oTokensToBuy
         );
     }
 }

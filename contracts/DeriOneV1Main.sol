@@ -46,23 +46,23 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 
     /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
     function getTheCheapestETHPutOption(
-        uint256 minExpiry,
-        uint256 maxExpiry,
-        uint256 minStrike,
-        uint256 maxStrike,
-        uint256 optionSizeInWEI
+        uint256 _minExpiry,
+        uint256 _maxExpiry,
+        uint256 _minStrike,
+        uint256 _maxStrike,
+        uint256 _optionSizeInWEI
     ) public {
         getTheCheapestETHPutOptionInHegicV888(
-            minExpiry,
-            minStrike,
-            optionSizeInWEI
+            _minExpiry,
+            _minStrike,
+            _optionSizeInWEI
         );
         getTheCheapestETHPutOptionInOpynV1(
-            minExpiry,
-            maxExpiry,
-            minStrike,
-            maxStrike,
-            optionSizeInWEI
+            _minExpiry,
+            _maxExpiry,
+            _minStrike,
+            _maxStrike,
+            _optionSizeInWEI
         );
         if (
             theCheapestETHPutOptionInHegicV888.premium <
@@ -98,19 +98,19 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     }
 
     function buyTheCheapestETHPutOption(
-        uint256 minExpiry,
-        uint256 maxExpiry,
-        uint256 minStrike,
-        uint256 maxStrike,
-        uint256 optionSizeInWEI,
-        address receiver
+        uint256 _minExpiry,
+        uint256 _maxExpiry,
+        uint256 _minStrike,
+        uint256 _maxStrike,
+        uint256 _optionSizeInWEI,
+        address _receiver
     ) public {
         getTheCheapestETHPutOption(
-            minExpiry,
-            maxExpiry,
-            minStrike,
-            minStrike,
-            optionSizeInWEI
+            _minExpiry,
+            _maxExpiry,
+            _minStrike,
+            _maxStrike,
+            _optionSizeInWEI
         );
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {
             buyETHPutOptionInHegicV888(
@@ -121,7 +121,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
             emit ETHPutOptionBought("Hegic v888");
         } else if (theCheapestETHPutOption.protocol == Protocol.OpynV1) {
             buyETHPutOptionInOpynV1(
-                receiver,
+                _receiver,
                 theCheapestETHPutOption.oTokenAddress,
                 theCheapestETHPutOption.paymentTokenAddress,
                 theCheapestETHPutOption.optionSizeInWEI
