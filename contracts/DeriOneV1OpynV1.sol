@@ -113,7 +113,7 @@ contract DeriOneV1OpynV1 is Ownable {
     /// @dev we don't use ETH put options because the Opyn V1 has vulnerability there
     function _getWETHPutOptionsOTokenAddressList() private {
         oTokenAddressList = OpynOptionsFactoryV1Instance.optionsContracts();
-        instantiateOpynOTokenV1(oTokenAddressList);
+        _instantiateOpynOTokenV1(oTokenAddressList);
         for (uint256 i = 0; i < oTokenV1InstanceList.length; i++) {
             if (
                 oTokenV1InstanceList[i].underlying() == WETHTokenAddress &&
