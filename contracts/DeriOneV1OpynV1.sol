@@ -182,17 +182,17 @@ contract DeriOneV1OpynV1 is Ownable {
                     .oTokenAddress;
             } else {}
         }
-        uint256 premiumToPayInETH =
+        uint256 premiumToPayInWEI =
             OpynExchangeV1Instance.premiumToPay(
                 oTokenAddress,
                 address(0),
                 oTokensToBuy
             );
-        return premiumToPayInETH;
+        return premiumToPayInWEI;
     }
 
     function _constructFilteredWETHPutOptionOTokenListV1(
-        uint256 optionSizeInETH
+        uint256 optionSizeInWEI
     ) private {
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             filteredWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
@@ -202,16 +202,16 @@ contract DeriOneV1OpynV1 is Ownable {
                 _getOpynV1Premium(
                     filteredWETHPutOptionOTokenV1InstanceList[i].expiry(),
                     filteredWETHPutOptionOTokenV1InstanceList[i].strikePrice(),
-                    optionSizeInETH
+                    optionSizeInWEI
                 )
             );
         }
     }
 
     /// @notice check if there is enough liquidity in Opyn V1 pool
-    /// @param optionSizeInETH the size of an option to buy in ETH
+    /// @param optionSizeInWEI the size of an option to buy in WEI
     /// @dev write a function for power operations. the SafeMath library doesn't support this yet.
-    function _hasEnoughOTokenLiquidityInOpynV1(uint256 optionSizeInETH)
+    function _hasEnoughOTokenLiquidityInOpynV1(uint256 optionSizeInWEI)
         private
         returns (bool)
     {
@@ -241,10 +241,10 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 maxExpiry,
         uint256 minStrike,
         uint256 maxStrike,
-        uint256 optionSizeInETH
+        uint256 optionSizeInWEI
     ) internal {
         require(
-            _hasEnoughOTokenLiquidityInOpynV1(optionSizeInETH) == true,
+            _hasEnoughOTokenLiquidityInOpynV1(optionSizeInWEI) == true,
             "your size is too big for this oToken liquidity in the Opyn V1"
         );
         _getWETHPutOptionsOTokenAddressList();
@@ -254,7 +254,7 @@ contract DeriOneV1OpynV1 is Ownable {
             minStrike,
             maxStrike
         );
-        _constructFilteredWETHPutOptionOTokenListV1(optionSizeInETH);
+        _constructFilteredWETHPutOptionOTokenListV1(optionSizeInWEI);
         uint256 minimumPremium = filteredWETHPutOptionOTokenListV1[0].premium;
         for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
             if (

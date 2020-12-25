@@ -16,7 +16,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         uint256 expiry;
         uint256 strike;
         uint256 premium;
-        uint256 optionSizeInETH;
+        uint256 optionSizeInWEI;
     }
     TheCheapestETHPutOption theCheapestETHPutOption;
 
@@ -36,7 +36,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
             _hegicETHOptionV888Address,
             _hegicETHPoolV888Address
         )
-        DeriOneV1OpynV1(            
+        DeriOneV1OpynV1(
             _opynExchangeV1Address,
             _opynOptionsFactoryV1Address,
             _uniswapFactoryV1Address
@@ -49,19 +49,19 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         uint256 maxExpiry,
         uint256 minStrike,
         uint256 maxStrike,
-        uint256 optionSizeInETH
+        uint256 optionSizeInWEI
     ) public {
         getTheCheapestETHPutOptionInHegicV888(
             minExpiry,
             minStrike,
-            optionSizeInETH
+            optionSizeInWEI
         );
         getTheCheapestETHPutOptionInOpynV1(
             minExpiry,
             maxExpiry,
             minStrike,
             maxStrike,
-            optionSizeInETH
+            optionSizeInWEI
         );
         if (
             theCheapestETHPutOptionInHegicV888.premium <
@@ -97,7 +97,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         uint256 maxExpiry,
         uint256 minStrike,
         uint256 maxStrike,
-        uint256 optionSizeInETH,
+        uint256 optionSizeInWEI,
         address receiver
     ) public {
         getTheCheapestETHPutOption(
@@ -105,12 +105,12 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
             maxExpiry,
             minStrike,
             minStrike,
-            optionSizeInETH
+            optionSizeInWEI
         );
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {
             buyETHPutOptionInHegicV888(
                 theCheapestETHPutOption.expiry,
-                theCheapestETHPutOption.optionSizeInETH,
+                theCheapestETHPutOption.optionSizeInWEI,
                 theCheapestETHPutOption.strike
             );
         } else if (theCheapestETHPutOption.protocol == Protocol.OpynV1) {
@@ -118,7 +118,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
                 receiver,
                 theCheapestETHPutOption.oTokenAddress,
                 theCheapestETHPutOption.paymentTokenAddress,
-                theCheapestETHPutOption.optionSizeInETH
+                theCheapestETHPutOption.optionSizeInWEI
             );
         } else {
             // there is no options

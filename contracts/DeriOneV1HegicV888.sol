@@ -89,8 +89,8 @@ contract DeriOneV1HegicV888 is Ownable {
     }
 
     /// @notice check if there is enough liquidity in Hegic pool
-    /// @param optionSizeInETH the size of an option to buy in ETH
-    function _hasEnoughETHLiquidityInHegicV888(uint256 optionSizeInETH)
+    /// @param optionSizeInWEI the size of an option to buy in WEI
+    function _hasEnoughETHLiquidityInHegicV888(uint256 optionSizeInWEI)
         private
         returns (bool)
     {
@@ -98,9 +98,9 @@ contract DeriOneV1HegicV888 is Ownable {
             HegicETHPoolV888Instance.totalBalance().mul(8).div(10) -
                 (HegicETHPoolV888Instance.totalBalance() -
                     HegicETHPoolV888Instance.lockedAmount());
-        if (maxOptionSize > optionSizeInETH) {
+        if (maxOptionSize > optionSizeInWEI) {
             return true;
-        } else if (maxOptionSize <= optionSizeInETH) {
+        } else if (maxOptionSize <= optionSizeInWEI) {
             return false;
         }
     }
@@ -108,25 +108,25 @@ contract DeriOneV1HegicV888 is Ownable {
     /// @notice calculate the premium and get the cheapest ETH put option in Hegic v888
     /// @param minExpiry minimum expiration date
     /// @param minStrike minimum strike price
-    /// @param optionSizeInETH option size in ETH
+    /// @param optionSizeInWEI option size in WEI
     /// @dev does minExpiry and minStrike always give the cheapest premium? why? is this true?
     function getTheCheapestETHPutOptionInHegicV888(
         uint256 minExpiry,
         uint256 minStrike,
-        uint256 optionSizeInETH
+        uint256 optionSizeInWEI
     ) internal {
         require(
-            _hasEnoughETHLiquidityInHegicV888(optionSizeInETH) == true,
+            _hasEnoughETHLiquidityInHegicV888(optionSizeInWEI) == true,
             "your size is too big for liquidity in the Hegic V888"
         );
         uint256 impliedVolatility = _getHegicV888ImpliedVolatility();
         uint256 ETHPrice = _getHegicV888ETHPrice();
-        uint256 minimumPremiumToPayInETH =
+        uint256 minimumPremiumToPayInWEI =
             Math.sqrt(minExpiry).mul(impliedVolatility).mul(
                 minStrike.div(ETHPrice)
             );
         theCheapestETHPutOptionInHegicV888 = TheCheapestETHPutOptionInHegicV888(
-            minimumPremiumToPayInETH,
+            minimumPremiumToPayInWEI,
             minExpiry,
             minStrike
         );
