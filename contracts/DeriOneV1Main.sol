@@ -154,7 +154,6 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 // value type and reference type?
 // stack and heap?
 // think of a new way to structure your variables
-// start function parameter variable names with an `underscore(_)` to differentiate them from global variables.
 // add some function modifiers like view and pure?
 // you cannot rely on abi to interface converter. it is not good. i made more than enough mistakes in the interfaces.
 // explicitly state the data location for all variables of struct, array or mapping types (including function parameters)
@@ -174,3 +173,9 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 // perhaps hasLiquidity can be a modifier?
 
 // inheritance contract, abstract contract
+
+// i need to figure out how to convert between otoken and wei
+
+// how to do power operations against int32
+
+// how to deal with floating number exchange rate. can i use bignumber?
