@@ -194,6 +194,8 @@ contract DeriOneV1OpynV1 is Ownable {
         return premiumToPayInWEI;
     }
 
+    /// @notice construct the filteredWETHPutOptionOTokenListV1
+    /// @param _optionSizeInWEI the size of an option to buy in WEI
     function _constructFilteredWETHPutOptionOTokenListV1(
         uint256 _optionSizeInWEI
     ) private {
@@ -295,6 +297,7 @@ contract DeriOneV1OpynV1 is Ownable {
         address _paymentTokenAddress,
         uint256 _oTokensToBuy
     ) internal {
+        // can i pass some values from storage variables? 
         OpynExchangeV1Instance.buyOTokens(
             _receiver,
             _oTokenAddress,
@@ -306,3 +309,4 @@ contract DeriOneV1OpynV1 is Ownable {
 
 // how do you deal with the Number struct?
 // how to deal with float numbers in solidity
+// you need to calculate the oToken to buy from WEI 

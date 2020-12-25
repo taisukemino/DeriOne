@@ -20,6 +20,8 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         uint256 premium;
         uint256 optionSizeInWEI;
     }
+
+    // the cheapest ETH put option across options protocols
     TheCheapestETHPutOption theCheapestETHPutOption;
 
     event TheCheapestETHPutOptionGot(string protocolName);
@@ -135,7 +137,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     }
 }
 
-// watch new eth put options being created
+// watch new eth put options being created? we could do this every time a user calls and update the list?
 // how do you compare options?
 // what happens after our user buy? don't they want to exercise?
 // we could make two functions: one gets some options and the other gets only one option
@@ -149,14 +151,11 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 // people perhaps want to buy the most liquid one so that they can make sure that they can sell it later?
 // specify data location
 // enforce state changes of state variables with a function by adding a storage keyword? i dont think so.
-// adjust variable visibility
-// think how functions call each other
 // why say memory or calldata in a parameter?
 // calldata and stack dont understand
 // value type and reference type?
 // stack and heap?
 // think of a new way to structure your variables
-// add some function modifiers like view and pure?
 // you cannot rely on abi to interface converter. it is not good. i made more than enough mistakes in the interfaces.
 // explicitly state the data location for all variables of struct, array or mapping types (including function parameters)
 // adjust visibility of variables. they should be all private by default i guess
@@ -172,12 +171,20 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 
 // refer to uniswap factory contract to manage registry?
 
-// perhaps hasLiquidity can be a modifier?
-
 // inheritance contract, abstract contract
 
 // i need to figure out how to convert between otoken and wei
 
-// how to do power operations against int32
-
 // how to deal with floating number exchange rate. can i use bignumber?
+
+// can i declare a variable or struct to convert it for calculation?
+
+// gas optimization. what consumes a lot of gas?
+
+// you can generalize this to support more tokens and calls
+
+// support more protocols
+
+// how do you expand from here?
+
+// support opyn v2

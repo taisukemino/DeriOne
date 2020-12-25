@@ -26,6 +26,8 @@ contract DeriOneV1HegicV888 is Ownable {
         uint256 strike;
         uint256 premium;
     }
+
+    // the cheapest ETH put option in the Hegic V888
     TheCheapestETHPutOptionInHegicV888 theCheapestETHPutOptionInHegicV888;
 
     event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
@@ -83,7 +85,7 @@ contract DeriOneV1HegicV888 is Ownable {
         return impliedVolatilityRate;
     }
 
-    /// @notice get the underlying asset price
+    /// @notice get the underlying asset price, ETH
     function _getHegicV888ETHPrice() private view returns (uint256) {
         (, int256 latestPrice, , , ) = ETHPriceOracleInstance.latestRoundData();
         uint256 ETHPrice = uint256(latestPrice);
@@ -144,6 +146,7 @@ contract DeriOneV1HegicV888 is Ownable {
         uint256 _amount,
         uint256 _strike
     ) internal {
+        // can i possibly pass some values from the storage variables?
         HegicETHOptionV888Instance.create(
             _expiry,
             _amount,
