@@ -20,6 +20,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     }
     TheCheapestETHPutOption theCheapestETHPutOption;
 
+    event TheCheapestETHPutOptionGot(string protocolName);
     event ETHPutOptionBought(string protocolName);
 
     constructor(
@@ -76,6 +77,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
                 theCheapestWETHPutOptionInOpynV1.premium,
                 0
             );
+            emit TheCheapestETHPutOptionGot("opyn v1");
         } else if (
             theCheapestETHPutOptionInHegicV888.premium >
             theCheapestWETHPutOptionInOpynV1.premium
@@ -89,7 +91,10 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
                 theCheapestETHPutOptionInHegicV888.premium,
                 0
             );
-        } else {}
+            emit TheCheapestETHPutOptionGot("hegic v888");
+        } else {
+            emit TheCheapestETHPutOptionGot("no matches");
+        }
     }
 
     function buyTheCheapestETHPutOption(
