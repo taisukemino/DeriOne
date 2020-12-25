@@ -180,7 +180,7 @@ contract DeriOneV1OpynV1 is Ownable {
             ) {
                 oTokenAddress = filteredWETHPutOptionOTokenListV1[i]
                     .oTokenAddress;
-            } else {}
+            }
         }
         uint256 premiumToPayInWEI =
             OpynExchangeV1Instance.premiumToPay(
