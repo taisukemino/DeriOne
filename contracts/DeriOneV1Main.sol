@@ -20,7 +20,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     }
     TheCheapestETHPutOption theCheapestETHPutOption;
 
-    event NewOptionBought();
+    event ETHPutOptionBought(string protocolName);
 
     constructor(
         address _ETHPriceOracleAddress,
@@ -113,6 +113,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
                 theCheapestETHPutOption.optionSizeInWEI,
                 theCheapestETHPutOption.strike
             );
+            emit ETHPutOptionBought("Hegic v888");
         } else if (theCheapestETHPutOption.protocol == Protocol.OpynV1) {
             buyETHPutOptionInOpynV1(
                 receiver,
@@ -120,8 +121,9 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
                 theCheapestETHPutOption.paymentTokenAddress,
                 theCheapestETHPutOption.optionSizeInWEI
             );
+            emit ETHPutOptionBought("opyn v1");
         } else {
-            // there is no options
+            emit ETHPutOptionBought("no match");
         }
     }
 }
