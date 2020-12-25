@@ -230,7 +230,7 @@ contract DeriOneV1OpynV1 is Ownable {
         (uint256 value, int32 exponent) =
             theCheapestOTokenV1Instance.oTokenExchangeRate();
         uint256 optionSizeInOToken =
-            optionSizeInETH.mul(value.mul(10**exponent));
+            _optionSizeInWEI.mul(value.mul(10**exponent));
         if (optionSizeInOToken < oTokenLiquidity) {
             return true;
         } else {
