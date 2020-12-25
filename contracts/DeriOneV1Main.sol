@@ -16,8 +16,8 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         address oTokenAddress;
         address paymentTokenAddress;
         uint256 expiry;
-        uint256 strike;
-        uint256 premium;
+        uint256 strike; // which token?
+        uint256 premium; // which token?
         uint256 optionSizeInWEI;
     }
 

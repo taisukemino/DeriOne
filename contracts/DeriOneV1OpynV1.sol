@@ -29,18 +29,23 @@ contract DeriOneV1OpynV1 is Ownable {
     struct WETHPutOptionOTokensV1 {
         address oTokenAddress;
         uint256 expiry;
-        uint256 strike;
-        uint256 premium;
+        uint256 strike; // which token?
+        uint256 premium; // which token?
     }
-    WETHPutOptionOTokensV1[] WETHPutOptionOTokenListV1;
-    WETHPutOptionOTokensV1[] filteredWETHPutOptionOTokenListV1;
 
     struct TheCheapestWETHPutOptionInOpynV1 {
         address oTokenAddress;
         uint256 expiry;
-        uint256 strike;
-        uint256 premium;
+        uint256 strike; // which token?
+        uint256 premium; // which token?
     }
+
+    // WETH put option oToken list with expiry and and strike price
+    // i could filter with expiry here upfront
+    WETHPutOptionOTokensV1[] WETHPutOptionOTokenListV1;
+    // a filtered oToken list with expiry and and strike price 
+    WETHPutOptionOTokensV1[] filteredWETHPutOptionOTokenListV1;
+    // the cheaptest WETH put option in the Opyn V1
     TheCheapestWETHPutOptionInOpynV1 theCheapestWETHPutOptionInOpynV1;
 
     event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
