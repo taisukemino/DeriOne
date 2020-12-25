@@ -13,10 +13,10 @@ library Math {
     function sqrt(uint256 y) internal pure returns (uint256 z) {
         if (y > 3) {
             z = y;
-            uint256 x = y.div(2) + 1;
+            uint256 x = y.div(2).add(1);
             while (x < z) {
                 z = x;
-                x = (y.div(x) + x).div(2);
+                x = (y.div(x).add(x)).div(2);
             }
         } else if (y != 0) {
             z = 1;
