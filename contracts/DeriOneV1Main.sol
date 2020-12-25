@@ -69,20 +69,6 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
             theCheapestWETHPutOptionInOpynV1.premium
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
-                Protocol.OpynV1,
-                theCheapestWETHPutOptionInOpynV1.oTokenAddress,
-                address(0),
-                theCheapestWETHPutOptionInOpynV1.expiry,
-                theCheapestWETHPutOptionInOpynV1.strike,
-                theCheapestWETHPutOptionInOpynV1.premium,
-                0
-            );
-            emit TheCheapestETHPutOptionGot("opyn v1");
-        } else if (
-            theCheapestETHPutOptionInHegicV888.premium >
-            theCheapestWETHPutOptionInOpynV1.premium
-        ) {
-            theCheapestETHPutOption = TheCheapestETHPutOption(
                 Protocol.HegicV888,
                 address(0),
                 address(0),
@@ -92,6 +78,20 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
                 0
             );
             emit TheCheapestETHPutOptionGot("hegic v888");
+        } else if (
+            theCheapestETHPutOptionInHegicV888.premium >
+            theCheapestWETHPutOptionInOpynV1.premium
+        ) {
+            theCheapestETHPutOption = TheCheapestETHPutOption(
+                Protocol.OpynV1,
+                theCheapestWETHPutOptionInOpynV1.oTokenAddress,
+                address(0),
+                theCheapestWETHPutOptionInOpynV1.expiry,
+                theCheapestWETHPutOptionInOpynV1.strike,
+                theCheapestWETHPutOptionInOpynV1.premium,
+                0
+            );
+            emit TheCheapestETHPutOptionGot("opyn v1");
         } else {
             emit TheCheapestETHPutOptionGot("no matches");
         }
