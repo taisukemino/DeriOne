@@ -97,7 +97,7 @@ contract DeriOneV1OpynV1 is Ownable {
 
     /// @notice instantiate the OpynOTokenV1 contract
     /// @param _opynOTokenV1AddressList OpynOTokenV1Address
-    function instantiateOpynOTokenV1(address[] memory _opynOTokenV1AddressList)
+    function _instantiateOpynOTokenV1(address[] memory _opynOTokenV1AddressList)
         private
     {
         for (uint256 i = 0; i < _opynOTokenV1AddressList.length; i++) {
