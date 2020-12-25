@@ -100,9 +100,11 @@ contract DeriOneV1HegicV888 is Ownable {
         returns (bool)
     {
         uint256 maxOptionSize =
-            HegicETHPoolV888Instance.totalBalance().mul(8).div(10) -
-                (HegicETHPoolV888Instance.totalBalance() -
-                    HegicETHPoolV888Instance.lockedAmount());
+            HegicETHPoolV888Instance.totalBalance().mul(8).div(10).sub(
+                HegicETHPoolV888Instance.totalBalance().sub(
+                    HegicETHPoolV888Instance.lockedAmount()
+                )
+            );
         if (maxOptionSize > _optionSizeInWEI) {
             return true;
         } else if (maxOptionSize <= _optionSizeInWEI) {
