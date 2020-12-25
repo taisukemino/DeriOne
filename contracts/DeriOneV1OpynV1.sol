@@ -166,7 +166,7 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 _expiry,
         uint256 _strike,
         uint256 _oTokensToBuy
-    ) private returns (uint256) {
+    ) private view returns (uint256) {
         address oTokenAddress;
         for (
             uint256 i = 0;
