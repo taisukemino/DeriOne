@@ -16,7 +16,7 @@ contract DeriOneV1OpynV1 is Ownable {
     IOpynOptionsFactoryV1 private OpynOptionsFactoryV1Instance;
     IOpynOTokenV1[] private oTokenV1InstanceList;
     IOpynOTokenV1[] private WETHPutOptionOTokenV1InstanceList;
-    IOpynOTokenV1[] private filteredWETHPutOptionOTokenV1InstanceList;
+    IOpynOTokenV1[] private matchedWETHPutOptionOTokenV1InstanceList;
     IUniswapFactoryV1 private UniswapFactoryV1Instance;
 
     address constant USDCTokenAddress =
@@ -40,11 +40,10 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 premium; // which token?
     }
 
-    // WETH put option oToken list with expiry and and strike price
-    // i could filter with expiry here upfront
+    // WETH put option oToken list that has not expired
     WETHPutOptionOTokensV1[] WETHPutOptionOTokenListV1;
-    // a filtered oToken list with expiry and and strike price 
-    WETHPutOptionOTokensV1[] filteredWETHPutOptionOTokenListV1;
+    // a matched oToken list with a buyer's expiry and strike price conditions
+    WETHPutOptionOTokensV1[] matchedWETHPutOptionOTokenListV1;
     // the cheaptest WETH put option in the Opyn V1
     TheCheapestWETHPutOptionInOpynV1 theCheapestWETHPutOptionInOpynV1;
 
@@ -156,10 +155,10 @@ contract DeriOneV1OpynV1 is Ownable {
                 _minExpiry < WETHPutOptionOTokenV1InstanceList[i].expiry() &&
                 WETHPutOptionOTokenV1InstanceList[i].expiry() < _maxExpiry
             ) {
-                filteredWETHPutOptionOTokenV1InstanceList.push(
+                matchedWETHPutOptionOTokenV1InstanceList.push(
                     WETHPutOptionOTokenV1InstanceList[i]
                 );
-                filteredWETHPutOptionOTokenListV1[i]
+                matchedWETHPutOptionOTokenListV1[i]
                     .oTokenAddress = WETHPutOptionOTokenListV1[i].oTokenAddress;
             }
         }
@@ -177,16 +176,16 @@ contract DeriOneV1OpynV1 is Ownable {
         address oTokenAddress;
         for (
             uint256 i = 0;
-            i < filteredWETHPutOptionOTokenV1InstanceList.length;
+            i < matchedWETHPutOptionOTokenV1InstanceList.length;
             i++
         ) {
             if (
-                filteredWETHPutOptionOTokenV1InstanceList[i].expiry() ==
+                matchedWETHPutOptionOTokenV1InstanceList[i].expiry() ==
                 _expiry &&
-                filteredWETHPutOptionOTokenV1InstanceList[i].strikePrice() ==
+                matchedWETHPutOptionOTokenV1InstanceList[i].strikePrice() ==
                 _strike
             ) {
-                oTokenAddress = filteredWETHPutOptionOTokenListV1[i]
+                oTokenAddress = matchedWETHPutOptionOTokenListV1[i]
                     .oTokenAddress;
             }
         }
@@ -199,19 +198,19 @@ contract DeriOneV1OpynV1 is Ownable {
         return premiumToPayInWEI;
     }
 
-    /// @notice construct the filteredWETHPutOptionOTokenListV1
+    /// @notice construct the matchedWETHPutOptionOTokenListV1
     /// @param _optionSizeInWEI the size of an option to buy in WEI
-    function _constructFilteredWETHPutOptionOTokenListV1(
+    function _constructMatchedWETHPutOptionOTokenListV1(
         uint256 _optionSizeInWEI
     ) private {
-        for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
-            filteredWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
-                filteredWETHPutOptionOTokenListV1[i].oTokenAddress,
-                filteredWETHPutOptionOTokenV1InstanceList[i].expiry(),
-                filteredWETHPutOptionOTokenV1InstanceList[i].strikePrice(),
+        for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
+            matchedWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
+                matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
+                matchedWETHPutOptionOTokenV1InstanceList[i].expiry(),
+                matchedWETHPutOptionOTokenV1InstanceList[i].strikePrice(),
                 _getOpynV1Premium(
-                    filteredWETHPutOptionOTokenV1InstanceList[i].expiry(),
-                    filteredWETHPutOptionOTokenV1InstanceList[i].strikePrice(),
+                    matchedWETHPutOptionOTokenV1InstanceList[i].expiry(),
+                    matchedWETHPutOptionOTokenV1InstanceList[i].strikePrice(),
                     _optionSizeInWEI // this should be oToken amount right?
                 )
             );
@@ -264,26 +263,26 @@ contract DeriOneV1OpynV1 is Ownable {
             _minStrike,
             _maxStrike
         );
-        _constructFilteredWETHPutOptionOTokenListV1(_optionSizeInWEI);
-        uint256 minimumPremium = filteredWETHPutOptionOTokenListV1[0].premium;
-        for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
+        _constructMatchedWETHPutOptionOTokenListV1(_optionSizeInWEI);
+        uint256 minimumPremium = matchedWETHPutOptionOTokenListV1[0].premium;
+        for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
             if (
-                filteredWETHPutOptionOTokenListV1[i].premium >
-                filteredWETHPutOptionOTokenListV1[i + 1].premium
+                matchedWETHPutOptionOTokenListV1[i].premium >
+                matchedWETHPutOptionOTokenListV1[i + 1].premium
             ) {
-                minimumPremium = filteredWETHPutOptionOTokenListV1[i + 1]
+                minimumPremium = matchedWETHPutOptionOTokenListV1[i + 1]
                     .premium;
             }
         }
 
-        for (uint256 i = 0; i < filteredWETHPutOptionOTokenListV1.length; i++) {
+        for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
             if (
-                minimumPremium == filteredWETHPutOptionOTokenListV1[i].premium
+                minimumPremium == matchedWETHPutOptionOTokenListV1[i].premium
             ) {
                 theCheapestWETHPutOptionInOpynV1 = TheCheapestWETHPutOptionInOpynV1(
-                    filteredWETHPutOptionOTokenListV1[i].oTokenAddress,
-                    filteredWETHPutOptionOTokenListV1[i].expiry,
-                    filteredWETHPutOptionOTokenListV1[i].strike,
+                    matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
+                    matchedWETHPutOptionOTokenListV1[i].expiry,
+                    matchedWETHPutOptionOTokenListV1[i].strike,
                     minimumPremium
                 );
             }
