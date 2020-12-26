@@ -30,12 +30,6 @@ contract DeriOneV1HegicV888 is Ownable {
     // the cheapest ETH put option in the Hegic V888
     TheCheapestETHPutOptionInHegicV888 theCheapestETHPutOptionInHegicV888;
 
-    event NewETHPriceOracleAddressRegistered(address ETHPriceOracleAddress);
-    event NewHegicETHOptionV888AddressRegistered(
-        address hegicETHOptionV888Address
-    );
-    event NewHegicETHPoolV888AddressRegistered(address hegicETHPoolV888Address);
-
     constructor(
         address _ETHPriceOracleAddress,
         address _hegicETHOptionV888Address,
@@ -53,7 +47,6 @@ contract DeriOneV1HegicV888 is Ownable {
         onlyOwner
     {
         ETHPriceOracleInstance = IETHPriceOracle(_ETHPriceOracleAddress);
-        emit NewETHPriceOracleAddressRegistered(_ETHPriceOracleAddress);
     }
 
     /// @notice instantiate the HegicETHOptionV888 contract
@@ -65,7 +58,6 @@ contract DeriOneV1HegicV888 is Ownable {
         HegicETHOptionV888Instance = IHegicETHOptionV888(
             _hegicETHOptionV888Address
         );
-        emit NewHegicETHOptionV888AddressRegistered(_hegicETHOptionV888Address);
     }
 
     /// @notice instantiate the HegicETHPoolV888 contract
@@ -75,7 +67,6 @@ contract DeriOneV1HegicV888 is Ownable {
         onlyOwner
     {
         HegicETHPoolV888Instance = IHegicETHPoolV888(_hegicETHPoolV888Address);
-        emit NewHegicETHPoolV888AddressRegistered(_hegicETHPoolV888Address);
     }
 
     /// @notice get the implied volatility

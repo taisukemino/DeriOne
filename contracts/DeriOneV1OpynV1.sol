@@ -47,17 +47,6 @@ contract DeriOneV1OpynV1 is Ownable {
     // the cheaptest WETH put option in the Opyn V1
     TheCheapestWETHPutOptionInOpynV1 theCheapestWETHPutOptionInOpynV1;
 
-    event NewOpynExchangeV1AddressRegistered(address opynExchangeV1Address);
-    event NewOpynOptionsFactoryV1AddressRegistered(
-        address opynOptionsFactoryV1Address
-    );
-    event NewOpynOTokenV1AddressRegistered(address opynOTokenV1Address);
-    event NewOpynWETHPutOptionOTokenV1AddressRegistered(
-        address opynWETHPutOptionOTokenV1Address
-    );
-    event NewUniswapFactoryV1AddressRegistered(address uniswapFactoryV1Address);
-    event NotWETHPutOptionsOToken(address oTokenAddress);
-
     constructor(
         address _opynExchangeV1Address,
         address _opynOptionsFactoryV1Address,
@@ -75,7 +64,6 @@ contract DeriOneV1OpynV1 is Ownable {
         onlyOwner
     {
         OpynExchangeV1Instance = IOpynExchangeV1(_opynExchangeV1Address);
-        emit NewOpynExchangeV1AddressRegistered(_opynExchangeV1Address);
     }
 
     /// @notice instantiate the OpynOptionsFactoryV1 contract
@@ -84,9 +72,6 @@ contract DeriOneV1OpynV1 is Ownable {
         address _opynOptionsFactoryV1Address
     ) public onlyOwner {
         OpynOptionsFactoryV1Instance = IOpynOptionsFactoryV1(
-            _opynOptionsFactoryV1Address
-        );
-        emit NewOpynOptionsFactoryV1AddressRegistered(
             _opynOptionsFactoryV1Address
         );
     }
@@ -98,7 +83,6 @@ contract DeriOneV1OpynV1 is Ownable {
         onlyOwner
     {
         UniswapFactoryV1Instance = IUniswapFactoryV1(_uniswapFactoryV1Address);
-        emit NewUniswapFactoryV1AddressRegistered(_uniswapFactoryV1Address);
     }
 
     /// @notice instantiate the OpynOTokenV1 contract
@@ -110,7 +94,6 @@ contract DeriOneV1OpynV1 is Ownable {
             oTokenV1InstanceList.push(
                 IOpynOTokenV1(_opynOTokenV1AddressList[i])
             );
-            emit NewOpynOTokenV1AddressRegistered(_opynOTokenV1AddressList[i]);
         }
     }
 
@@ -129,8 +112,6 @@ contract DeriOneV1OpynV1 is Ownable {
                 WETHPutOptionOTokenListV1[i].oTokenAddress = oTokenAddressList[
                     i
                 ];
-            } else {
-                emit NotWETHPutOptionsOToken(oTokenAddressList[i]);
             }
         }
     }
