@@ -132,17 +132,17 @@ contract DeriOneV1HegicV888 is Ownable {
 
     /// @notice creates a new option in Hegic V888
     /// @param _expiry option period in seconds (1 days <= period <= 4 weeks)
-    /// @param _amount option amount
+    /// @param _optionSizeInWEI option amount
     /// @param _strike strike price of the option
     function buyETHPutOptionInHegicV888(
         uint256 _expiry,
-        uint256 _amount,
+        uint256 _optionSizeInWEI,
         uint256 _strike
     ) internal {
         // can i possibly pass some values from the storage variables?
         HegicETHOptionV888Instance.create(
             _expiry,
-            _amount,
+            _optionSizeInWEI,
             _strike,
             putOptionType
         );
