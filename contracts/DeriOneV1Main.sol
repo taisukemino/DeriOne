@@ -141,9 +141,6 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 // how do you compare options?
 // what happens after our user buy? don't they want to exercise?
 // we could make two functions: one gets some options and the other gets only one option
-// console log solidity https://medium.com/nomic-labs-blog/better-solidity-debugging-console-log-is-finally-here-fc66c54f2c4a
-// event, logx or
-// truffle console log?
 // make two functions. one that takes a range and the other that takes a fixed value. what to return when there is none?
 // ask them: mazzi, gammahammer are both options traders irl. attm is a maths phd that prices options for living
 // there are two functions: fixed expiry and strike function. in opyn, it is either nothing or exist. in hegic, it always returns only one.
@@ -161,30 +158,17 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 // adjust visibility of variables. they should be all private by default i guess
 // the way i handle otoken instances are wrong. this needs to be fixed.
 
-// What to do with that strikePrice that returns two values. What do they do?
-//    /* represents floting point numbers, where number = value * 10 ** exponent
-//     i.e 0.1 = 10 * 10 ** -3 */
-//     struct Number {
-//         uint256 value;
-//         int32 exponent;
-//     }
-
-// refer to uniswap factory contract to manage registry?
-
 // inheritance contract, abstract contract
-
-// i need to figure out how to convert between otoken and wei
-
-// how to deal with floating number exchange rate. can i use bignumber?
 
 // can i declare a variable or struct to convert it for calculation?
 
 // gas optimization. what consumes a lot of gas?
 
 // you can generalize this to support more tokens and calls
-
 // support more protocols
-
 // how do you expand from here?
-
 // support opyn v2
+
+// Make another repo and make it public. Share it tomorrow. Share the process.
+// fix all the compile errors today
+// finish before the deployment

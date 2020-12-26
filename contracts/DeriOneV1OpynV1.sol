@@ -291,6 +291,4 @@ contract DeriOneV1OpynV1 is Ownable {
     }
 }
 
-// how do you deal with the Number struct?
-// how to deal with float numbers in solidity
 // you need to calculate the oToken to buy from WEI 
