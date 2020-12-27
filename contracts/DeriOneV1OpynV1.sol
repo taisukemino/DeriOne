@@ -200,7 +200,8 @@ contract DeriOneV1OpynV1 is Ownable {
 
     /// @notice check if there is enough liquidity in Opyn V1 pool
     /// @param _optionSizeInWEI the size of an option to buy in WEI
-    /// @dev write a function for power operations. the SafeMath library doesn't support this yet.
+    /// @dev write a function for power operations. it might overflow? the SafeMath library doesn't support this yet.
+    /// @dev add 10**9 to oTokenExchangeRate because it can be a floating number
     function _hasEnoughOTokenLiquidityInOpynV1(uint256 _optionSizeInWEI)
         private
         returns (bool)
@@ -215,10 +216,23 @@ contract DeriOneV1OpynV1 is Ownable {
             theCheapestOTokenV1Instance.balanceOf(
                 uniswapExchangeContractAddress
             );
+
+        uint256 oTokenExchangeRate;
         (uint256 value, int32 exponent) =
             theCheapestOTokenV1Instance.oTokenExchangeRate();
-        uint256 optionSizeInOToken =
-            _optionSizeInWEI.mul(value.mul(10**exponent));
+        if (exponent >= 0) {
+            oTokenExchangeRate = value.mul(uint256(10)**uint256(exponent)).mul(
+                10**9
+            );
+        } else {
+            oTokenExchangeRate = value
+                .mul(uint256(1).div(10**uint256(0 - exponent)))
+                .mul(10**9);
+        }
+        uint256 optionSizeInOToken = _optionSizeInWEI.mul(oTokenExchangeRate);
+
+        oTokenLiquidity.mul(10**9);
+
         if (optionSizeInOToken < oTokenLiquidity) {
             return true;
         } else {
@@ -257,9 +271,7 @@ contract DeriOneV1OpynV1 is Ownable {
         }
 
         for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
-            if (
-                minimumPremium == matchedWETHPutOptionOTokenListV1[i].premium
-            ) {
+            if (minimumPremium == matchedWETHPutOptionOTokenListV1[i].premium) {
                 theCheapestWETHPutOptionInOpynV1 = TheCheapestWETHPutOptionInOpynV1(
                     matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
                     matchedWETHPutOptionOTokenListV1[i].expiry,
@@ -281,7 +293,7 @@ contract DeriOneV1OpynV1 is Ownable {
         address _paymentTokenAddress,
         uint256 _oTokensToBuy
     ) internal {
-        // can i pass some values from storage variables? 
+        // can i pass some values from storage variables?
         OpynExchangeV1Instance.buyOTokens(
             _receiver,
             _oTokenAddress,
@@ -291,4 +303,4 @@ contract DeriOneV1OpynV1 is Ownable {
     }
 }
 
-// you need to calculate the oToken to buy from WEI 
+// you need to calculate the oToken to buy from WEI
