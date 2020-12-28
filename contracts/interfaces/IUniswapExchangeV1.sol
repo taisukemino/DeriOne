@@ -165,9 +165,11 @@ interface IUniswapExchangeV1 {
     ) external returns (uint256 tokens_sold);
 
     // ERC20 comaptibility for liquidity tokens
-    bytes32 public name;
-    bytes32 public symbol;
-    uint256 public decimals;
+    function name() external returns (bytes32 out);
+
+    function symbol() external returns (bytes32 out);
+
+    function decimals() external returns (uint256 out);
 
     function transfer(address _to, uint256 _value) external returns (bool);
 
