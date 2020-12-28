@@ -27,7 +27,7 @@ contract DeriOneV1OpynV1 is Ownable {
     address[] private oTokenAddressList;
     address[] private unexpiredOTokenAddressList;
 
-    struct WETHPutOptionOTokensV1 {
+    struct MatchedWETHPutOptionOTokenV1 {
         address oTokenAddress;
         uint256 expiry;
         uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6. you can get the strike underlying asset? and then get their decimal?
@@ -42,7 +42,9 @@ contract DeriOneV1OpynV1 is Ownable {
     }
 
     // a matched oToken list with a buyer's expiry and strike price conditions
-    WETHPutOptionOTokensV1[] matchedWETHPutOptionOTokenListV1;
+    // strike value is scaled by 1e9
+    MatchedWETHPutOptionOTokenV1[] matchedWETHPutOptionOTokenListV1;
+
     // the cheaptest WETH put option in the Opyn V1
     TheCheapestWETHPutOptionInOpynV1 theCheapestWETHPutOptionInOpynV1;
 
