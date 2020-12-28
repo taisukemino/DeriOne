@@ -130,12 +130,12 @@ contract DeriOneV1OpynV1 is Ownable {
     /// @notice get WETH Put Options that meet expiry and strike conditions
     /// @param _minExpiry minimum expiration date
     /// @param _maxExpiry maximum expiration date
-    /// @param _minStrike minimum strike price
+    /// @param _minStrikeInUSD minimum strike price
     /// @param _maxStrike maximum strike price
     function _filterWETHPutOptionsOTokenAddresses(
         uint256 _minExpiry,
         uint256 _maxExpiry,
-        uint256 _minStrike,
+        uint256 _minStrikeInUSD,
         uint256 _maxStrike
     ) private {
         for (uint256 i = 0; i < WETHPutOptionOTokenV1InstanceList.length; i++) {
@@ -149,7 +149,7 @@ contract DeriOneV1OpynV1 is Ownable {
                     .mul(uint256(1).div(10**uint256(0 - exponent)))
                     .mul(10**9);
             }
-            _minStrike.mul(10**9);
+            _minStrikeInUSD.mul(10**9);
             // this could be done somewhere else for the sake of making the code DRY.
 
             if (
@@ -303,7 +303,7 @@ contract DeriOneV1OpynV1 is Ownable {
     function getTheCheapestETHPutOptionInOpynV1(
         uint256 _minExpiry,
         uint256 _maxExpiry,
-        uint256 _minStrike,
+        uint256 _minStrikeInUSD,
         uint256 _maxStrike,
         uint256 _optionSizeInWEI
     ) internal {
@@ -315,7 +315,7 @@ contract DeriOneV1OpynV1 is Ownable {
         _filterWETHPutOptionsOTokenAddresses(
             _minExpiry,
             _maxExpiry,
-            _minStrike,
+            _minStrikeInUSD,
             _maxStrike
         );
         _constructMatchedWETHPutOptionOTokenListV1(_optionSizeInWEI);

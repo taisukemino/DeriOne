@@ -49,22 +49,23 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     {}
 
     /// @dev you need to think how premium is denominated. in opyn, it is USDC? in hegic, it's WETH?
+    /// @dev what is decimal place of usd value?
     function getTheCheapestETHPutOption(
         uint256 _minExpiry,
         uint256 _maxExpiry,
-        uint256 _minStrike,
+        uint256 _minStrikeInUSD,
         uint256 _maxStrike,
         uint256 _optionSizeInWEI
     ) public {
         getTheCheapestETHPutOptionInHegicV888(
             _minExpiry,
-            _minStrike,
+            _minStrikeInUSD,
             _optionSizeInWEI
         );
         getTheCheapestETHPutOptionInOpynV1(
             _minExpiry,
             _maxExpiry,
-            _minStrike,
+            _minStrikeInUSD,
             _maxStrike,
             _optionSizeInWEI
         );
