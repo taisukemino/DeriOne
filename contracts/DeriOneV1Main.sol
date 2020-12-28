@@ -70,7 +70,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         );
         if (
             theCheapestETHPutOptionInHegicV888.premium <
-            theCheapestWETHPutOptionInOpynV1.premium
+            theCheapestWETHPutOptionInOpynV1.premiumInWEI
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
                 Protocol.HegicV888,
@@ -84,15 +84,15 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
             emit TheCheapestETHPutOptionGot("hegic v888");
         } else if (
             theCheapestETHPutOptionInHegicV888.premium >
-            theCheapestWETHPutOptionInOpynV1.premium
+            theCheapestWETHPutOptionInOpynV1.premiumInWEI
         ) {
             theCheapestETHPutOption = TheCheapestETHPutOption(
                 Protocol.OpynV1,
                 theCheapestWETHPutOptionInOpynV1.oTokenAddress,
                 address(0),
                 theCheapestWETHPutOptionInOpynV1.expiry,
-                theCheapestWETHPutOptionInOpynV1.strike,
-                theCheapestWETHPutOptionInOpynV1.premium,
+                theCheapestWETHPutOptionInOpynV1.strikeInUSD,
+                theCheapestWETHPutOptionInOpynV1.premiumInWEI,
                 0
             );
             emit TheCheapestETHPutOptionGot("opyn v1");
@@ -170,7 +170,5 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 // support opyn v2
 
 // Make another repo and make it public. Share it tomorrow. Share the process.
-// fix all the compile errors today
-// finish before the deployment
 
 // check all the value and see which currency it is denominated
