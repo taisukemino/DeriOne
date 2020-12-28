@@ -222,9 +222,13 @@ contract DeriOneV1OpynV1 is Ownable {
                     .mul(10**9);
             }
             // this could be done somewhere else for the sake of making the code DRY.
-            // strike stored in matchedWETHPutOptionOTokenListV1 has mul(10**9)
 
-            matchedWETHPutOptionOTokenListV1[i] = WETHPutOptionOTokensV1(
+            uint256 oTokensToBuy = _optionSizeInWEI.mul();
+            // calculate the otokens to buy from the wei. get the exchange rate.
+
+            matchedWETHPutOptionOTokenListV1[
+                i
+            ] = MatchedWETHPutOptionOTokenV1(
                 matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
                 matchedWETHPutOptionOTokenV1InstanceList[i].expiry(),
                 strikePrice,
