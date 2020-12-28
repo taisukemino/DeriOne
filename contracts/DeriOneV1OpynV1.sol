@@ -31,14 +31,14 @@ contract DeriOneV1OpynV1 is Ownable {
         address oTokenAddress;
         uint256 expiry;
         uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6. you can get the strike underlying asset? and then get their decimal?
-        uint256 premium; // which token?
+        uint256 premiumInWEI;
     }
 
     struct TheCheapestWETHPutOptionInOpynV1 {
         address oTokenAddress;
         uint256 expiry;
         uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6.  you can get the strike underlying asset? and then get their decimal? this is scaled by 1e9 to avoid floating numbers.
-        uint256 premium; // which token?
+        uint256 premiumInWEI;
     }
 
     // a matched oToken list with a buyer's expiry and strike price conditions
@@ -197,7 +197,7 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 premiumToPayInWEI =
             OpynExchangeV1Instance.premiumToPay(
                 oTokenAddress,
-                address(0),
+                address(0), // pay with ETH
                 _oTokensToBuy
             );
         return premiumToPayInWEI;
@@ -302,19 +302,19 @@ contract DeriOneV1OpynV1 is Ownable {
             _maxStrike
         );
         _constructMatchedWETHPutOptionOTokenListV1(_optionSizeInWEI);
-        uint256 minimumPremium = matchedWETHPutOptionOTokenListV1[0].premium;
+        uint256 minimumPremium = matchedWETHPutOptionOTokenListV1[0].premiumInWEI;
         for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
             if (
-                matchedWETHPutOptionOTokenListV1[i].premium >
-                matchedWETHPutOptionOTokenListV1[i + 1].premium
+                matchedWETHPutOptionOTokenListV1[i].premiumInWEI >
+                matchedWETHPutOptionOTokenListV1[i + 1].premiumInWEI
             ) {
                 minimumPremium = matchedWETHPutOptionOTokenListV1[i + 1]
-                    .premium;
+                    .premiumInWEI;
             }
         }
 
         for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
-            if (minimumPremium == matchedWETHPutOptionOTokenListV1[i].premium) {
+            if (minimumPremium == matchedWETHPutOptionOTokenListV1[i].premiumInWEI) {
                 theCheapestWETHPutOptionInOpynV1 = TheCheapestWETHPutOptionInOpynV1(
                     matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
                     matchedWETHPutOptionOTokenListV1[i].expiry,
