@@ -235,19 +235,24 @@ contract DeriOneV1OpynV1 is Ownable {
             }
             // this could be done somewhere else for the sake of making the code DRY.
 
-            uint256 oTokensToBuy = _optionSizeInWEI.mul();
-            // calculate the otokens to buy from the wei. get the exchange rate.
+            address uniswapExchangeContractAddress =
+                UniswapFactoryV1Instance.getExchange(
+                    matchedWETHPutOptionOTokenListV1[i].oTokenAddress
+                );
+            _instantiateUniswapExchangeV1(uniswapExchangeContractAddress);
+            uint256 oTokensToBuy =
+                UniswapExchangeV1Instance.getEthToTokenInputPrice(
+                    _optionSizeInWEI
+                );
 
-            matchedWETHPutOptionOTokenListV1[
-                i
-            ] = MatchedWETHPutOptionOTokenV1(
+            matchedWETHPutOptionOTokenListV1[i] = MatchedWETHPutOptionOTokenV1(
                 matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
                 matchedWETHPutOptionOTokenV1InstanceList[i].expiry(),
                 strikePrice,
                 _getOpynV1Premium(
                     matchedWETHPutOptionOTokenV1InstanceList[i].expiry(),
                     strikePrice,
-                    oTokensToBuy // this should be oToken amount right?
+                    oTokensToBuy
                 )
             );
         }
