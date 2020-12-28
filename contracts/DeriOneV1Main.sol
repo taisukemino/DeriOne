@@ -16,9 +16,9 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         address oTokenAddress;
         address paymentTokenAddress;
         uint256 expiry;
-        uint256 strike; // which token?
-        uint256 premium; // which token?
         uint256 optionSizeInWEI;
+        uint256 premium; // which token?
+        uint256 strike; // which token?
     }
 
     // the cheapest ETH put option across options protocols
@@ -77,9 +77,9 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
                 address(0),
                 address(0),
                 theCheapestETHPutOptionInHegicV888.expiry,
-                theCheapestETHPutOptionInHegicV888.strike,
+                0,
                 theCheapestETHPutOptionInHegicV888.premium,
-                0
+                theCheapestETHPutOptionInHegicV888.strike
             );
             emit TheCheapestETHPutOptionGot("hegic v888");
         } else if (
@@ -91,9 +91,9 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
                 theCheapestWETHPutOptionInOpynV1.oTokenAddress,
                 address(0),
                 theCheapestWETHPutOptionInOpynV1.expiry,
-                theCheapestWETHPutOptionInOpynV1.strikeInUSD,
+                0,
                 theCheapestWETHPutOptionInOpynV1.premiumInWEI,
-                0
+                theCheapestWETHPutOptionInOpynV1.strikeInUSD
             );
             emit TheCheapestETHPutOptionGot("opyn v1");
         } else {

@@ -23,8 +23,8 @@ contract DeriOneV1HegicV888 is Ownable {
 
     struct TheCheapestETHPutOptionInHegicV888 {
         uint256 expiry;
-        uint256 strike; // which token?
         uint256 premiumInWEI;
+        uint256 strike; // which token?
     }
 
     // the cheapest ETH put option in the Hegic V888
@@ -125,8 +125,8 @@ contract DeriOneV1HegicV888 is Ownable {
             );
         theCheapestETHPutOptionInHegicV888 = TheCheapestETHPutOptionInHegicV888(
             _minExpiry,
-            _minStrike,
-            minimumPremiumToPayInWEI
+            minimumPremiumToPayInWEI,
+            _minStrike
         );
     }
 

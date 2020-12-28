@@ -32,15 +32,15 @@ contract DeriOneV1OpynV1 is Ownable {
     struct MatchedWETHPutOptionOTokenV1 {
         address oTokenAddress;
         uint256 expiry;
-        uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6. you can get the strike underlying asset? and then get their decimal?
         uint256 premiumInWEI;
+        uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6. you can get the strike underlying asset? and then get their decimal?
     }
 
     struct TheCheapestWETHPutOptionInOpynV1 {
         address oTokenAddress;
         uint256 expiry;
-        uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6.  you can get the strike underlying asset? and then get their decimal? this is scaled by 1e9 to avoid floating numbers.
         uint256 premiumInWEI;
+        uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6.  you can get the strike underlying asset? and then get their decimal? this is scaled by 1e9 to avoid floating numbers.
     }
 
     // a matched oToken list with a buyer's expiry and strike price conditions
@@ -248,12 +248,12 @@ contract DeriOneV1OpynV1 is Ownable {
             matchedWETHPutOptionOTokenListV1[i] = MatchedWETHPutOptionOTokenV1(
                 matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
                 matchedWETHPutOptionOTokenV1InstanceList[i].expiry(),
-                strikePrice,
                 _getOpynV1Premium(
                     matchedWETHPutOptionOTokenV1InstanceList[i].expiry(),
                     strikePrice,
                     oTokensToBuy
-                )
+                ),
+                strikePrice
             );
         }
     }
@@ -339,8 +339,8 @@ contract DeriOneV1OpynV1 is Ownable {
                 theCheapestWETHPutOptionInOpynV1 = TheCheapestWETHPutOptionInOpynV1(
                     matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
                     matchedWETHPutOptionOTokenListV1[i].expiry,
-                    matchedWETHPutOptionOTokenListV1[i].strikeInUSD,
-                    minimumPremium
+                    minimumPremium,
+                    matchedWETHPutOptionOTokenListV1[i].strikeInUSD
                 );
             }
         }
