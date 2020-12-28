@@ -54,7 +54,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         uint256 _minExpiry,
         uint256 _maxExpiry,
         uint256 _minStrikeInUSD,
-        uint256 _maxStrike,
+        uint256 _maxStrikeInUSD,
         uint256 _optionSizeInWEI
     ) public {
         getTheCheapestETHPutOptionInHegicV888(
@@ -66,7 +66,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
             _minExpiry,
             _maxExpiry,
             _minStrikeInUSD,
-            _maxStrike,
+            _maxStrikeInUSD,
             _optionSizeInWEI
         );
         if (
@@ -105,16 +105,16 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     function buyTheCheapestETHPutOption(
         uint256 _minExpiry,
         uint256 _maxExpiry,
-        uint256 _minStrike,
-        uint256 _maxStrike,
+        uint256 _minStrikeInUSD,
+        uint256 _maxStrikeInUSD,
         uint256 _optionSizeInWEI,
         address _receiver
     ) public {
         getTheCheapestETHPutOption(
             _minExpiry,
             _maxExpiry,
-            _minStrike,
-            _maxStrike,
+            _minStrikeInUSD,
+            _maxStrikeInUSD,
             _optionSizeInWEI
         );
         if (theCheapestETHPutOption.protocol == Protocol.HegicV888) {

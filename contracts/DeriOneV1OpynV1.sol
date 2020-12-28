@@ -131,12 +131,12 @@ contract DeriOneV1OpynV1 is Ownable {
     /// @param _minExpiry minimum expiration date
     /// @param _maxExpiry maximum expiration date
     /// @param _minStrikeInUSD minimum strike price
-    /// @param _maxStrike maximum strike price
+    /// @param _maxStrikeInUSD maximum strike price
     function _filterWETHPutOptionsOTokenAddresses(
         uint256 _minExpiry,
         uint256 _maxExpiry,
         uint256 _minStrikeInUSD,
-        uint256 _maxStrike
+        uint256 _maxStrikeInUSD
     ) private {
         for (uint256 i = 0; i < WETHPutOptionOTokenV1InstanceList.length; i++) {
             uint256 strike;
@@ -154,7 +154,7 @@ contract DeriOneV1OpynV1 is Ownable {
 
             if (
                 _minStrike < strike &&
-                strike < _maxStrike &&
+                strike < _maxStrikeInUSD &&
                 _minExpiry < WETHPutOptionOTokenV1InstanceList[i].expiry() &&
                 WETHPutOptionOTokenV1InstanceList[i].expiry() < _maxExpiry
             ) {
@@ -304,7 +304,7 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 _minExpiry,
         uint256 _maxExpiry,
         uint256 _minStrikeInUSD,
-        uint256 _maxStrike,
+        uint256 _maxStrikeInUSD,
         uint256 _optionSizeInWEI
     ) internal {
         require(
@@ -316,7 +316,7 @@ contract DeriOneV1OpynV1 is Ownable {
             _minExpiry,
             _maxExpiry,
             _minStrikeInUSD,
-            _maxStrike
+            _maxStrikeInUSD
         );
         _constructMatchedWETHPutOptionOTokenListV1(_optionSizeInWEI);
         uint256 minimumPremium =
