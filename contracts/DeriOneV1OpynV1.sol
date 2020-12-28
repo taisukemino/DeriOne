@@ -29,14 +29,14 @@ contract DeriOneV1OpynV1 is Ownable {
     struct WETHPutOptionOTokensV1 {
         address oTokenAddress;
         uint256 expiry;
-        uint256 strike; // which token?
+        uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6. you can get the strike underlying asset? and then get their decimal?
         uint256 premium; // which token?
     }
 
     struct TheCheapestWETHPutOptionInOpynV1 {
         address oTokenAddress;
         uint256 expiry;
-        uint256 strike; // which token?
+        uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6.  you can get the strike underlying asset? and then get their decimal? this is scaled by 1e9 to avoid floating numbers.
         uint256 premium; // which token?
     }
 
@@ -210,7 +210,6 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 _optionSizeInWEI
     ) private {
         for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
-
             uint256 strikePrice;
             (uint256 value, int32 exponent) =
                 matchedWETHPutOptionOTokenV1InstanceList[i].strikePrice();
@@ -316,7 +315,7 @@ contract DeriOneV1OpynV1 is Ownable {
                 theCheapestWETHPutOptionInOpynV1 = TheCheapestWETHPutOptionInOpynV1(
                     matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
                     matchedWETHPutOptionOTokenListV1[i].expiry,
-                    matchedWETHPutOptionOTokenListV1[i].strike,
+                    matchedWETHPutOptionOTokenListV1[i].strikeInUSD,
                     minimumPremium
                 );
             }
