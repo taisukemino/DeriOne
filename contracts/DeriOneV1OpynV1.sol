@@ -25,6 +25,7 @@ contract DeriOneV1OpynV1 is Ownable {
         0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 
     address[] private oTokenAddressList;
+    address[] private unexpiredOTokenAddressList;
 
     struct WETHPutOptionOTokensV1 {
         address oTokenAddress;
@@ -40,8 +41,6 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 premium; // which token?
     }
 
-    // WETH put option oToken list that has not expired
-    WETHPutOptionOTokensV1[] WETHPutOptionOTokenListV1;
     // a matched oToken list with a buyer's expiry and strike price conditions
     WETHPutOptionOTokensV1[] matchedWETHPutOptionOTokenListV1;
     // the cheaptest WETH put option in the Opyn V1
@@ -109,9 +108,7 @@ contract DeriOneV1OpynV1 is Ownable {
                 oTokenV1InstanceList[i].expiry() > block.timestamp
             ) {
                 WETHPutOptionOTokenV1InstanceList.push(oTokenV1InstanceList[i]);
-                WETHPutOptionOTokenListV1[i].oTokenAddress = oTokenAddressList[
-                    i
-                ];
+                unexpiredOTokenAddressList[i] = oTokenAddressList[i];
             }
         }
     }
@@ -151,7 +148,7 @@ contract DeriOneV1OpynV1 is Ownable {
                     WETHPutOptionOTokenV1InstanceList[i]
                 );
                 matchedWETHPutOptionOTokenListV1[i]
-                    .oTokenAddress = WETHPutOptionOTokenListV1[i].oTokenAddress;
+                    .oTokenAddress = unexpiredOTokenAddressList[i];
             }
         }
     }
