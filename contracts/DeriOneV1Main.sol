@@ -121,7 +121,7 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
             buyETHPutOptionInHegicV888(
                 theCheapestETHPutOption.expiry,
                 theCheapestETHPutOption.optionSizeInWEI,
-                theCheapestETHPutOption.strike
+                theCheapestETHPutOption.strikeInUSD
             );
             emit ETHPutOptionBought("Hegic v888");
         } else if (theCheapestETHPutOption.protocol == Protocol.OpynV1) {
