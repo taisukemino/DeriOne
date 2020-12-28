@@ -314,7 +314,8 @@ contract DeriOneV1OpynV1 is Ownable {
             _maxStrike
         );
         _constructMatchedWETHPutOptionOTokenListV1(_optionSizeInWEI);
-        uint256 minimumPremium = matchedWETHPutOptionOTokenListV1[0].premiumInWEI;
+        uint256 minimumPremium =
+            matchedWETHPutOptionOTokenListV1[0].premiumInWEI;
         for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
             if (
                 matchedWETHPutOptionOTokenListV1[i].premiumInWEI >
@@ -326,7 +327,10 @@ contract DeriOneV1OpynV1 is Ownable {
         }
 
         for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
-            if (minimumPremium == matchedWETHPutOptionOTokenListV1[i].premiumInWEI) {
+            if (
+                minimumPremium ==
+                matchedWETHPutOptionOTokenListV1[i].premiumInWEI
+            ) {
                 theCheapestWETHPutOptionInOpynV1 = TheCheapestWETHPutOptionInOpynV1(
                     matchedWETHPutOptionOTokenListV1[i].oTokenAddress,
                     matchedWETHPutOptionOTokenListV1[i].expiry,
@@ -357,5 +361,3 @@ contract DeriOneV1OpynV1 is Ownable {
         );
     }
 }
-
-// you need to calculate the oToken to buy from WEI
