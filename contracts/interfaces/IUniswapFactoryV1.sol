@@ -3,17 +3,26 @@
 pragma solidity ^0.6.0;
 
 interface IUniswapFactoryV1 {
+    // Public Variables
+    address public exchangeTemplate;
+    uint256 public tokenCount;
+
+    // Create Exchange
+    function createExchange(address token) external returns (address exchange);
+
+    // Get Exchange and Token Info
+    function getExchange(address token)
+        external
+        view
+        returns (address exchange);
+
+    function getToken(address exchange) external view returns (address token);
+
+    function getTokenWithId(uint256 tokenId)
+        external
+        view
+        returns (address token);
+
+    // Never use
     function initializeFactory(address template) external;
-
-    function createExchange(address token) external returns (address out);
-
-    function getExchange(address token) external returns (address out);
-
-    function getToken(address exchange) external returns (address out);
-
-    function getTokenWithId(uint256 token_id) external returns (address out);
-
-    function exchangeTemplate() external returns (address out);
-
-    function tokenCount() external returns (uint256 out);
 }
