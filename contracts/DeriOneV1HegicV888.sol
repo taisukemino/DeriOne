@@ -124,9 +124,9 @@ contract DeriOneV1HegicV888 is Ownable {
                 _minStrike.div(ETHPrice)
             );
         theCheapestETHPutOptionInHegicV888 = TheCheapestETHPutOptionInHegicV888(
-            minimumPremiumToPayInWEI,
             _minExpiry,
-            _minStrike
+            _minStrike,
+            minimumPremiumToPayInWEI
         );
     }
 
