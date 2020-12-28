@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./interfaces/IOpynExchangeV1.sol";
 import "./interfaces/IOpynOptionsFactoryV1.sol";
 import "./interfaces/IOpynOTokenV1.sol";
+import "./interfaces/IUniswapExchangeV1.sol";
 import "./interfaces/IUniswapFactoryV1.sol";
 
 contract DeriOneV1OpynV1 is Ownable {
@@ -17,6 +18,7 @@ contract DeriOneV1OpynV1 is Ownable {
     IOpynOTokenV1[] private oTokenV1InstanceList;
     IOpynOTokenV1[] private WETHPutOptionOTokenV1InstanceList;
     IOpynOTokenV1[] private matchedWETHPutOptionOTokenV1InstanceList;
+    IUniswapExchangeV1 private UniswapExchangeV1Instance;
     IUniswapFactoryV1 private UniswapFactoryV1Instance;
 
     address constant USDCTokenAddress =
@@ -96,6 +98,16 @@ contract DeriOneV1OpynV1 is Ownable {
                 IOpynOTokenV1(_opynOTokenV1AddressList[i])
             );
         }
+    }
+
+    /// @notice instantiate the UniswapExchangeV1 contract
+    /// @param _uniswapExchangeV1Address UniswapExchangeV1Address
+    function _instantiateUniswapExchangeV1(address _uniswapExchangeV1Address)
+        private
+    {
+        UniswapExchangeV1Instance = IUniswapExchangeV1(
+            _uniswapExchangeV1Address
+        );
     }
 
     /// @notice get the list of WETH put option oToken addresses
