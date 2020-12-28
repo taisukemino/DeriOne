@@ -1,7 +1,7 @@
 {
   "name": "DeriOne",
   "version": "1.0.0",
-  "description": "Get the best ETH put option price from Hegic, Opyn, Auctus by calling a single function.",
+  "description": "Get the best option price across options protocols.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
