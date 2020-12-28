@@ -231,7 +231,7 @@ contract DeriOneV1OpynV1 is Ownable {
                 _getOpynV1Premium(
                     matchedWETHPutOptionOTokenV1InstanceList[i].expiry(),
                     strikePrice,
-                    _optionSizeInWEI // this should be oToken amount right?
+                    oTokensToBuy // this should be oToken amount right?
                 )
             );
         }
