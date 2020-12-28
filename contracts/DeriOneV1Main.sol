@@ -172,3 +172,5 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
 // Make another repo and make it public. Share it tomorrow. Share the process.
 // fix all the compile errors today
 // finish before the deployment
+
+// check all the value and see which currency it is denominated
