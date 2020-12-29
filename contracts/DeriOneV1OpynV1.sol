@@ -90,6 +90,7 @@ contract DeriOneV1OpynV1 is Ownable {
 
     /// @notice instantiate the OpynOTokenV1 contract
     /// @param _opynOTokenV1AddressList OpynOTokenV1Address
+    /// @dev this needs to be called not only in a constructor because new contracts will be created
     function _instantiateOpynOTokenV1(address[] memory _opynOTokenV1AddressList)
         private
     {

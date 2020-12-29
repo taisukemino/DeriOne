@@ -8,6 +8,8 @@ import "./DeriOneV1OpynV1.sol";
 /// @author tai
 /// @title A contract for getting the cheapest options price
 /// @notice For now, this contract gets the cheapest ETH/WETH put options price from Opyn and Hegic
+/// @dev explicitly state the data location for all variables of struct, array or mapping types (including function parameters)
+/// @dev adjust visibility of variables. they should be all private by default i guess
 contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     enum Protocol {HegicV888, OpynV1}
     struct TheCheapestETHPutOption {
@@ -48,6 +50,8 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
     {}
 
     /// @dev what is decimal place of usd value?
+    /// @dev we could make another function that gets some options instead of only one
+    /// @dev we could take fixed values for expiry and strike.
     function getTheCheapestETHPutOption(
         uint256 _minExpiry,
         uint256 _maxExpiry,
@@ -135,15 +139,3 @@ contract DeriOneV1Main is DeriOneV1HegicV888, DeriOneV1OpynV1 {
         }
     }
 }
-
-// watch new eth put options being created? we could do this every time a user calls and update the list?
-// we could make two functions: one gets some options and the other gets only one option
-// make two functions. one that takes a range and the other that takes a fixed value. what to return when there is none?
-// there are two functions: fixed expiry and strike function. in opyn, it is either nothing or exist. in hegic, it always returns only one.
-// fixed values: in opyn, it is like that you can get options. in hegic, np.
-// explicitly state the data location for all variables of struct, array or mapping types (including function parameters)
-// adjust visibility of variables. they should be all private by default i guess
-// the way i handle otoken instances are wrong. this needs to be fixed.
-// can i declare a variable or struct to convert it for calculation?
-// gas optimization. what consumes a lot of gas?
-// check all the value and see which currency it is denominated
