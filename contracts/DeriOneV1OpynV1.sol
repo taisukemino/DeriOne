@@ -128,9 +128,13 @@ contract DeriOneV1OpynV1 is Ownable {
         }
     }
 
-    function calculateStrike(IOpynOTokenV1 oTokenV1Instance) {
+    function _calculateStrike(IOpynOTokenV1 _oTokenV1Instance)
+        private
+        view
+        returns (uint256)
+    {
         uint256 strike;
-        (uint256 value, int32 exponent) = oTokenV1Instance.strikePrice();
+        (uint256 value, int32 exponent) = _oTokenV1Instance.strikePrice();
         if (exponent >= 0) {
             strike = value.mul(uint256(10)**uint256(exponent)).mul(10**9);
         } else {
@@ -154,7 +158,7 @@ contract DeriOneV1OpynV1 is Ownable {
     ) private {
         for (uint256 i = 0; i < WETHPutOptionOTokenV1InstanceList.length; i++) {
             uint256 strike =
-                calculateStrike(WETHPutOptionOTokenV1InstanceList[i]);
+                _calculateStrike(WETHPutOptionOTokenV1InstanceList[i]);
             _minStrikeInUSD.mul(10**9);
             if (
                 _minStrike < strike &&
@@ -187,7 +191,7 @@ contract DeriOneV1OpynV1 is Ownable {
             i++
         ) {
             uint256 strikePrice =
-                calculateStrike(matchedWETHPutOptionOTokenV1InstanceList[i]);
+                _calculateStrike(matchedWETHPutOptionOTokenV1InstanceList[i]);
 
             _strike.mul(10**9);
 
