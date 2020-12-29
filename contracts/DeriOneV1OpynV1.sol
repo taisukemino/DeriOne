@@ -161,7 +161,7 @@ contract DeriOneV1OpynV1 is Ownable {
                 _calculateStrike(WETHPutOptionOTokenV1InstanceList[i]);
             _minStrikeInUSD.mul(10**9);
             if (
-                _minStrike < strike &&
+                _minStrikeInUSD < strike &&
                 strike < _maxStrikeInUSD &&
                 _minExpiry < WETHPutOptionOTokenV1InstanceList[i].expiry() &&
                 WETHPutOptionOTokenV1InstanceList[i].expiry() < _maxExpiry
@@ -220,7 +220,7 @@ contract DeriOneV1OpynV1 is Ownable {
     ) private {
         for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
             uint256 strikePrice =
-                calculateStrike(matchedWETHPutOptionOTokenListV1[i]);
+                _calculateStrike(matchedWETHPutOptionOTokenV1InstanceList[i]);
 
             address uniswapExchangeContractAddress =
                 UniswapFactoryV1Instance.getExchange(
