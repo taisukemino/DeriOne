@@ -139,7 +139,6 @@ contract DeriOneV1HegicV888 is Ownable {
         uint256 _optionSizeInWEI,
         uint256 _strikeInUSD
     ) internal {
-        // can i possibly pass some values from the storage variables?
         HegicETHOptionV888Instance.create(
             _expiry,
             _optionSizeInWEI,
