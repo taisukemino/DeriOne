@@ -128,6 +128,19 @@ contract DeriOneV1OpynV1 is Ownable {
         }
     }
 
+    function calculateStrike(IOpynOTokenV1 oTokenV1Instance) {
+        uint256 strike;
+        (uint256 value, int32 exponent) = oTokenV1Instance.strikePrice();
+        if (exponent >= 0) {
+            strike = value.mul(uint256(10)**uint256(exponent)).mul(10**9);
+        } else {
+            strike = value.mul(uint256(1).div(10**uint256(0 - exponent))).mul(
+                10**9
+            );
+        }
+        return strike;
+    }
+
     /// @notice get WETH Put Options that meet expiry and strike conditions
     /// @param _minExpiry minimum expiration date
     /// @param _maxExpiry maximum expiration date
@@ -140,19 +153,9 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 _maxStrikeInUSD
     ) private {
         for (uint256 i = 0; i < WETHPutOptionOTokenV1InstanceList.length; i++) {
-            uint256 strike;
-            (uint256 value, int32 exponent) =
-                WETHPutOptionOTokenV1InstanceList[i].strikePrice();
-            if (exponent >= 0) {
-                strike = value.mul(uint256(10)**uint256(exponent)).mul(10**9);
-            } else {
-                strike = value
-                    .mul(uint256(1).div(10**uint256(0 - exponent)))
-                    .mul(10**9);
-            }
+            uint256 strike =
+                calculateStrike(WETHPutOptionOTokenV1InstanceList[i]);
             _minStrikeInUSD.mul(10**9);
-            // this could be done somewhere else for the sake of making the code DRY.
-
             if (
                 _minStrike < strike &&
                 strike < _maxStrikeInUSD &&
@@ -183,20 +186,10 @@ contract DeriOneV1OpynV1 is Ownable {
             i < matchedWETHPutOptionOTokenV1InstanceList.length;
             i++
         ) {
-            uint256 strikePrice;
-            (uint256 value, int32 exponent) =
-                matchedWETHPutOptionOTokenV1InstanceList[i].strikePrice();
-            if (exponent >= 0) {
-                strikePrice = value.mul(uint256(10)**uint256(exponent)).mul(
-                    10**9
-                );
-            } else {
-                strikePrice = value
-                    .mul(uint256(1).div(10**uint256(0 - exponent)))
-                    .mul(10**9);
-            }
+            uint256 strikePrice =
+                calculateStrike(matchedWETHPutOptionOTokenV1InstanceList[i]);
+
             _strike.mul(10**9);
-            // this could be done somewhere else for the sake of making the code DRY.
 
             if (
                 matchedWETHPutOptionOTokenV1InstanceList[i].expiry() ==
@@ -222,19 +215,8 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 _optionSizeInWEI
     ) private {
         for (uint256 i = 0; i < matchedWETHPutOptionOTokenListV1.length; i++) {
-            uint256 strikePrice;
-            (uint256 value, int32 exponent) =
-                matchedWETHPutOptionOTokenV1InstanceList[i].strikePrice();
-            if (exponent >= 0) {
-                strikePrice = value.mul(uint256(10)**uint256(exponent)).mul(
-                    10**9
-                );
-            } else {
-                strikePrice = value
-                    .mul(uint256(1).div(10**uint256(0 - exponent)))
-                    .mul(10**9);
-            }
-            // this could be done somewhere else for the sake of making the code DRY.
+            uint256 strikePrice =
+                calculateStrike(matchedWETHPutOptionOTokenListV1[i]);
 
             address uniswapExchangeContractAddress =
                 UniswapFactoryV1Instance.getExchange(
