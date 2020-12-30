@@ -120,6 +120,7 @@ contract DeriOneV1OpynV1 is Ownable {
         for (uint256 i = 0; i < oTokenV1InstanceList.length; i++) {
             if (
                 oTokenV1InstanceList[i].underlying() == WETHTokenAddress &&
+                oTokenV1InstanceList[i].strike() == USDCTokenAddress && //the asset in which the insurance is calculated
                 oTokenV1InstanceList[i].expiry() > block.timestamp
             ) {
                 WETHPutOptionOTokenV1InstanceList.push(oTokenV1InstanceList[i]);
