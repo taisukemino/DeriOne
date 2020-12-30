@@ -33,18 +33,19 @@ contract DeriOneV1OpynV1 is Ownable {
         address oTokenAddress;
         uint256 expiry;
         uint256 premiumInWEI;
-        uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6. you can get the strike underlying asset? and then get their decimal?
+        uint256 strikeInUSD; // scaled by 10 ** 7 for the USDC denominator
+        // strictly speaking, it's possible that 10 ** 7 can be too small or big depending on the value passed to the `_strikePrice` and `_strikeExp` of the factory contract at the point of a new oToken contract creation. they want to get decimals from the USDC token contract and programmatically pass it.
     }
 
     struct TheCheapestWETHPutOptionInOpynV1 {
         address oTokenAddress;
         uint256 expiry;
         uint256 premiumInWEI;
-        uint256 strikeInUSD; // need to do 10**7 to get the actual usd value. but what if it is not 10**7? it could be 10**8 depending on the values passed at the point of otoken contract deployment. is this because they use USDC? yes, their decimals are 6.  you can get the strike underlying asset? and then get their decimal? this is scaled by 1e9 to avoid floating numbers.
+        uint256 strikeInUSD; // scaled by 10 ** 7 for the USDC denominator
+        // strictly speaking, it's possible that 10 ** 7 can be too small or big depending on the value passed to the `_strikePrice` and `_strikeExp` of the factory contract at the point of a new oToken contract creation.
     }
 
     // a matched oToken list with a buyer's expiry and strike price conditions
-    // strike value is scaled by 1e9
     MatchedWETHPutOptionOTokenV1[] matchedWETHPutOptionOTokenListV1;
 
     // the cheaptest WETH put option in the Opyn V1
@@ -129,6 +130,7 @@ contract DeriOneV1OpynV1 is Ownable {
         }
     }
 
+    /// @dev strike price is scaled by 10 ** 7 for the USDC denominator
     function _calculateStrike(IOpynOTokenV1 _oTokenV1Instance)
         private
         view
@@ -249,7 +251,7 @@ contract DeriOneV1OpynV1 is Ownable {
     /// @notice check if there is enough liquidity in Opyn V1 pool
     /// @param _optionSizeInWEI the size of an option to buy in WEI
     /// @dev write a function for power operations. it might overflow? the SafeMath library doesn't support this yet.
-    /// @dev add 10**9 to oTokenExchangeRate because it can be a floating number
+    /// @dev oTokenExchangeRate is scaled by 10**9 because it can be a floating number
     function _hasEnoughOTokenLiquidityInOpynV1(uint256 _optionSizeInWEI)
         private
         returns (bool)
