@@ -137,10 +137,10 @@ contract DeriOneV1OpynV1 is Ownable {
         uint256 strike;
         (uint256 value, int32 exponent) = _oTokenV1Instance.strikePrice();
         if (exponent >= 0) {
-            strike = value.mul(uint256(10)**uint256(exponent)).mul(10**9);
+            strike = value.mul(uint256(10)**uint256(exponent)).mul(10**7);
         } else {
             strike = value.mul(uint256(1).div(10**uint256(0 - exponent))).mul(
-                10**9
+                10**7
             );
         }
         return strike;
@@ -160,7 +160,7 @@ contract DeriOneV1OpynV1 is Ownable {
         for (uint256 i = 0; i < WETHPutOptionOTokenV1InstanceList.length; i++) {
             uint256 strike =
                 _calculateStrike(WETHPutOptionOTokenV1InstanceList[i]);
-            _minStrikeInUSD.mul(10**9);
+            _minStrikeInUSD.mul(10**7);
             if (
                 _minStrikeInUSD < strike &&
                 strike < _maxStrikeInUSD &&
@@ -194,7 +194,7 @@ contract DeriOneV1OpynV1 is Ownable {
             uint256 strikePrice =
                 _calculateStrike(matchedWETHPutOptionOTokenV1InstanceList[i]);
 
-            _strike.mul(10**9);
+            _strike.mul(10**7);
 
             if (
                 matchedWETHPutOptionOTokenV1InstanceList[i].expiry() ==
