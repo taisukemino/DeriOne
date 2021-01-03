@@ -39,8 +39,8 @@ I develop with the mirrored mainnet in a local instance because it is painful to
    npm install -g ganache-cli
    ```
 
-2. _Fork_ and mirror mainnet into your Ganache instance.
-   You can fork mainnet and use each protocol's production contracts and production ERC20 tokens.
+2. _Fork_ and mirror the mainnet into your Ganache instance.
+   You can fork the mainnet and use each protocol's production contracts and production ERC20 tokens.
    Replace `INFURA_API_KEY` with the value in the following and run:
 
    ```
@@ -80,10 +80,6 @@ I develop with the mirrored mainnet in a local instance because it is painful to
 ## Set up
 
 Call some functions to instantiate a contract.
-
-hegicETHOptionAddress: [0xEfC0eEAdC1132A12c9487d800112693bf49EcfA2](https://etherscan.io/address/0xefc0eeadc1132a12c9487d800112693bf49ecfa2)
-opynExchangeAddress: [0x39246c4f3f6592c974ebc44f80ba6dc69b817c71](https://etherscan.io/address/0x39246c4f3f6592c974ebc44f80ba6dc69b817c71)
-ETHPriceOracleAddress: [0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419](https://etherscan.io/address/0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419)
 
 Call your contract's function within the truffle console.
 
