@@ -10,7 +10,7 @@ module.exports = function (deployer, network) {
   const opynOptionsFactoryV1Address = "";
   const uniswapFactoryV1Address = "";
 
-  if (network === "develop") {
+  if (network === "teams") {
     deployer.deploy(DeriOneV1Main, arg1, arg2);
   } else if (network === "mainnet") {
     // deploy the DeriOneV1Main contract with constructor arguments

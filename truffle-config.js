@@ -3,13 +3,9 @@ require("dotenv").config();
 
 module.exports = {
   networks: {
-    develop: {
-      host: "127.0.0.1",
-      port: 8545,
-      gas: 5000000,
-      fork: "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY,
+    teams: {
+      url: "https://sandbox.truffleteams.com/c3fa3fb4-612e-44d0-9480-fb491f3187e7",
       network_id: 1,
-      skipDryRun: true
     },
     mainnet: {
       provider: () =>
