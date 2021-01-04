@@ -3,9 +3,10 @@ require("dotenv").config();
 
 module.exports = {
   networks: {
-    teams: {
-      url: "https://sandbox.truffleteams.com/c3fa3fb4-612e-44d0-9480-fb491f3187e7",
-      network_id: 1,
+    mainnet_forking: {
+      url:
+        "https://sandbox.truffleteams.com/c3fa3fb4-612e-44d0-9480-fb491f3187e7",
+      network_id: 1
     },
     mainnet: {
       provider: () =>
