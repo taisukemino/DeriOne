@@ -20,7 +20,6 @@ _The logical extension of this aggregator would be expanding to other derivative
    INFURA_API_KEY =
    DEPLOYMENT_ACCOUNT_KEY =
    ```
-
    _\*ask for values to the team and pass them_
 
 2. navigate to your repo directory and install the dependencies:
@@ -84,7 +83,8 @@ Call some functions to instantiate a contract.
 Call your contract's function within the truffle console.
 
 ```
-
+truffle console --network mainnet_forking
+let contractInstance = await DeriOneV1Main.at(deployedAddress)
 ```
 
 If your implementation is correct, then the transaction will succeed. If it fails/reverts, a reason will be given.
