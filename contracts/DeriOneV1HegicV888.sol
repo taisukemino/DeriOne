@@ -40,7 +40,6 @@ contract DeriOneV1HegicV888 is Ownable {
         instantiateHegicETHPoolV888(_hegicETHPoolV888Address);
     }
 
-    /// @notice instantiate the ETHPriceOracle contract
     /// @param _ETHPriceOracleAddress ETHPriceOracleAddress
     function instantiateETHPriceOracle(address _ETHPriceOracleAddress)
         public
@@ -49,7 +48,6 @@ contract DeriOneV1HegicV888 is Ownable {
         ETHPriceOracleInstance = IETHPriceOracle(_ETHPriceOracleAddress);
     }
 
-    /// @notice instantiate the HegicETHOptionV888 contract
     /// @param _hegicETHOptionV888Address HegicETHOptionV888Address
     function instantiateHegicETHOptionV888(address _hegicETHOptionV888Address)
         public
@@ -60,7 +58,6 @@ contract DeriOneV1HegicV888 is Ownable {
         );
     }
 
-    /// @notice instantiate the HegicETHPoolV888 contract
     /// @param _hegicETHPoolV888Address HegicETHPoolV888Address
     function instantiateHegicETHPoolV888(address _hegicETHPoolV888Address)
         public
@@ -69,7 +66,6 @@ contract DeriOneV1HegicV888 is Ownable {
         HegicETHPoolV888Instance = IHegicETHPoolV888(_hegicETHPoolV888Address);
     }
 
-    /// @notice get the implied volatility
     function _getHegicV888ImpliedVolatility() private view returns (uint256) {
         uint256 impliedVolatilityRate =
             HegicETHOptionV888Instance.impliedVolRate();
@@ -83,7 +79,6 @@ contract DeriOneV1HegicV888 is Ownable {
         return ETHPrice;
     }
 
-    /// @notice check if there is enough liquidity in Hegic pool
     /// @param _optionSizeInWEI the size of an option to buy in WEI
     function _hasEnoughETHLiquidityInHegicV888(uint256 _optionSizeInWEI)
         private

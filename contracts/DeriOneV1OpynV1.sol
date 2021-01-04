@@ -61,7 +61,6 @@ contract DeriOneV1OpynV1 is Ownable {
         instantiateUniswapFactoryV1(_uniswapFactoryV1Address);
     }
 
-    /// @notice instantiate the OpynExchangeV1 contract
     /// @param _opynExchangeV1Address OpynExchangeV1Address
     function instantiateOpynExchangeV1(address _opynExchangeV1Address)
         public
@@ -70,7 +69,6 @@ contract DeriOneV1OpynV1 is Ownable {
         OpynExchangeV1Instance = IOpynExchangeV1(_opynExchangeV1Address);
     }
 
-    /// @notice instantiate the OpynOptionsFactoryV1 contract
     /// @param _opynOptionsFactoryV1Address OpynOptionsFactoryV1Address
     function instantiateOpynOptionsFactoryV1(
         address _opynOptionsFactoryV1Address
@@ -80,7 +78,6 @@ contract DeriOneV1OpynV1 is Ownable {
         );
     }
 
-    /// @notice instantiate the UniswapFactoryV1 contract
     /// @param _uniswapFactoryV1Address UniswapFactoryV1Address
     function instantiateUniswapFactoryV1(address _uniswapFactoryV1Address)
         public
@@ -89,7 +86,6 @@ contract DeriOneV1OpynV1 is Ownable {
         UniswapFactoryV1Instance = IUniswapFactoryV1(_uniswapFactoryV1Address);
     }
 
-    /// @notice instantiate the OpynOTokenV1 contract
     /// @param _opynOTokenV1AddressList OpynOTokenV1Address
     /// @dev this needs to be called not only in a constructor because new contracts will be created
     function _instantiateOpynOTokenV1(address[] memory _opynOTokenV1AddressList)
@@ -102,7 +98,6 @@ contract DeriOneV1OpynV1 is Ownable {
         }
     }
 
-    /// @notice instantiate the UniswapExchangeV1 contract
     /// @param _uniswapExchangeV1Address UniswapExchangeV1Address
     function _instantiateUniswapExchangeV1(address _uniswapExchangeV1Address)
         private
@@ -178,7 +173,6 @@ contract DeriOneV1OpynV1 is Ownable {
         }
     }
 
-    /// @notice get the premium in the Opyn V1
     /// @param _expiry expiration date
     /// @param _strike strike price
     /// @param _oTokensToBuy the amount of oToken to buy
@@ -216,7 +210,6 @@ contract DeriOneV1OpynV1 is Ownable {
         return premiumToPayInWEI;
     }
 
-    /// @notice construct the matchedWETHPutOptionOTokenListV1
     /// @param _optionSizeInWEI the size of an option to buy in WEI
     function _constructMatchedWETHPutOptionOTokenListV1(
         uint256 _optionSizeInWEI
@@ -248,7 +241,6 @@ contract DeriOneV1OpynV1 is Ownable {
         }
     }
 
-    /// @notice check if there is enough liquidity in Opyn V1 pool
     /// @param _optionSizeInWEI the size of an option to buy in WEI
     /// @dev write a function for power operations. it might overflow? the SafeMath library doesn't support this yet.
     /// @dev oTokenExchangeRate is scaled by 10**9 because it can be a floating number
@@ -336,7 +328,6 @@ contract DeriOneV1OpynV1 is Ownable {
         }
     }
 
-    /// @notice buy an ETH put option in Opyn V1
     /// @param _receiver the account that will receive the oTokens
     /// @param _oTokenAddress the address of the oToken that is being bought
     /// @param _paymentTokenAddress the address of the token you are paying for oTokens with
