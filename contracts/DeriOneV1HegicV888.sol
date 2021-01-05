@@ -93,7 +93,7 @@ contract DeriOneV1HegicV888 is Ownable {
             );
 
         require(
-            availableBalance < amountUtilized,
+            availableBalance > amountUtilized,
             "there is not enough available balance"
         );
         uint256 maxOptionSize = availableBalance.sub(amountUtilized);
