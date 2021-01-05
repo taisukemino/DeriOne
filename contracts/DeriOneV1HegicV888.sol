@@ -85,11 +85,12 @@ contract DeriOneV1HegicV888 is Ownable {
         view
         returns (bool)
     {
+        // `(Total ETH in contract) * 0.8 - the amount utilized for options`
         uint256 availableBalance =
             HegicETHPoolV888Instance.totalBalance().mul(8).div(10);
         uint256 amountUtilized =
             HegicETHPoolV888Instance.totalBalance().sub(
-                HegicETHPoolV888Instance.lockedAmount()
+                HegicETHPoolV888Instance.availableBalance()
             );
 
         require(
